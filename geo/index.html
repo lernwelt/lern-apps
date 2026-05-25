@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌍 Sarah lernt Geografie</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a1628;
+  --card: #0f2040;
+  --card2: #162850;
+  --border: #1e3a6e;
+  --accent: #38bdf8;
+  --accent2: #34d399;
+  --accent3: #fbbf24;
+  --orange: #fb923c;
+  --red: #f87171;
+  --purple: #c084fc;
+  --green: #4ade80;
+  --text: #e0f2fe;
+  --muted: #7dd3fc;
+  --r: 14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+.header {
+  background: linear-gradient(135deg, #1e3a8a 0%, #0369a1 50%, #065f46 100%);
+  padding: 20px 20px 0 20px; text-align: center;
+}
+.header h1 { font-family: 'Baloo 2', sans-serif; font-size: 1.6rem; font-weight: 900; color: white; margin-bottom: 4px; }
+.header p { font-size: .85rem; color: rgba(255,255,255,.8); margin-bottom: 16px; }
+
+.tabs { display: flex; gap: 4px; justify-content: center; padding: 0 10px; flex-wrap: wrap; }
+.tab { padding: 10px 14px; border-radius: 10px 10px 0 0; border: none; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .8rem; cursor: pointer; color: rgba(255,255,255,.7); background: rgba(255,255,255,.1); transition: all .2s; white-space: nowrap; }
+.tab.active { background: var(--bg); color: var(--accent); }
+
+.content { padding: 20px 16px; max-width: 680px; margin: 0 auto; }
+.section { display: none; }
+.section.active { display: block; }
+
+/* COLLAPSIBLE */
+.collapsible-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; padding: 14px 18px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); margin-bottom: 6px; transition: background .18s; }
+.collapsible-header:hover { background: var(--card2); }
+.collapsible-header.open { border-radius: var(--r) var(--r) 0 0; border-bottom: none; margin-bottom: 0; }
+.collapsible-title { font-family: 'Baloo 2', sans-serif; font-size: 1rem; font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 8px; }
+.collapsible-arrow { color: var(--muted); font-size: .9rem; transition: transform .3s; }
+.collapsible-header.open .collapsible-arrow { transform: rotate(180deg); }
+.collapsible-body { background: var(--card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--r) var(--r); padding: 0 18px; max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .35s ease; margin-bottom: 10px; }
+.collapsible-body.open { max-height: 3000px; padding: 14px 18px 18px 18px; }
+
+.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 16px 18px; margin-bottom: 14px; }
+.rule-box { background: var(--card2); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; border-left: 3px solid var(--accent); font-size: .9rem; line-height: 1.7; }
+.rule-box.green { border-left-color: var(--accent2); }
+.rule-box.yellow { border-left-color: var(--accent3); }
+.rule-box.orange { border-left-color: var(--orange); }
+.rule-box.purple { border-left-color: var(--purple); }
+.rule-box.red { border-left-color: var(--red); }
+
+/* ZONE GRID */
+.zone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
+.zone-item { background: var(--card2); border-radius: 10px; padding: 10px 12px; font-size: .85rem; line-height: 1.6; }
+.zone-name { font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: .95rem; margin-bottom: 4px; }
+.zone-regenwald { color: #4ade80; }
+.zone-tropen { color: #fb923c; }
+.zone-wueste { color: #fbbf24; }
+.zone-subtropen { color: #f97316; }
+.zone-gemasigt { color: #38bdf8; }
+.zone-polar { color: #c084fc; }
+
+.geo-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.geo-table th { text-align: left; color: var(--muted); font-size: .72rem; text-transform: uppercase; letter-spacing: 1px; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.geo-table td { padding: 7px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.geo-table tr:last-child td { border-bottom: none; }
+.geo-table .term { color: var(--accent); font-weight: 700; white-space: nowrap; }
+
+/* GAP / TEST */
+.test-progress-bar { background: var(--border); border-radius: 10px; height: 6px; margin-bottom: 6px; }
+.test-progress-fill { background: linear-gradient(90deg, var(--accent), var(--accent2)); height: 6px; border-radius: 10px; transition: width .4s; }
+.test-counter { font-size: .78rem; color: var(--muted); text-align: right; margin-bottom: 16px; }
+.test-question { font-size: 1.02rem; font-weight: 700; color: var(--text); margin-bottom: 12px; line-height: 1.5; }
+.test-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.test-opt { padding: 11px 16px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--card2); color: var(--text); font-family: 'Nunito', sans-serif; font-weight: 600; font-size: .93rem; cursor: pointer; text-align: left; transition: all .18s; line-height: 1.4; }
+.test-opt:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.test-opt.correct { border-color: var(--accent2); background: rgba(52,211,153,.1); color: var(--accent2); }
+.test-opt.wrong { border-color: var(--red); background: rgba(248,113,113,.1); color: var(--red); }
+.test-opt:disabled { cursor: default; }
+.test-feedback { border-radius: 10px; padding: 10px 14px; font-weight: 700; font-size: .88rem; margin-bottom: 12px; display: none; line-height: 1.5; }
+.test-feedback.show { display: block; }
+.test-feedback.good { background: rgba(52,211,153,.1); color: var(--accent2); border: 1px solid var(--accent2); }
+.test-feedback.bad { background: rgba(248,113,113,.1); color: var(--red); border: 1px solid var(--red); }
+
+/* GAP INPUT */
+.gap-input { background: var(--card2); border: 2px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'Nunito', sans-serif; font-weight: 700; font-size: .95rem; padding: 6px 12px; width: 200px; text-align: center; outline: none; transition: border-color .2s; }
+.gap-input:focus { border-color: var(--accent); }
+.gap-input.correct { border-color: var(--accent2); background: rgba(52,211,153,.1); color: var(--accent2); }
+.gap-input.wrong { border-color: var(--red); background: rgba(248,113,113,.1); color: var(--red); }
+
+.btn { padding: 11px 24px; border-radius: 30px; border: none; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .95rem; cursor: pointer; transition: all .2s; }
+.btn-primary { background: var(--accent); color: #0a1628; }
+.btn-primary:hover { background: #7dd3fc; }
+.btn-secondary { background: var(--card2); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+.sel-btn { padding: 7px 14px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--card2); color: var(--muted); font-family: 'Nunito', sans-serif; font-weight: 700; font-size: .8rem; cursor: pointer; transition: all .18s; }
+.sel-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(56,189,248,.08); }
+.select-row { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+
+/* FLASHCARD */
+.flashcard-container { perspective: 1000px; margin-bottom: 16px; }
+.flashcard { width: 100%; min-height: 170px; position: relative; transform-style: preserve-3d; transition: transform .5s; cursor: pointer; }
+.flashcard.flipped { transform: rotateY(180deg); }
+.fc-front, .fc-back { position: absolute; width: 100%; min-height: 170px; backface-visibility: hidden; border-radius: var(--r); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 20px; text-align: center; }
+.fc-front { background: linear-gradient(135deg, #0f2040, #162850); border: 1px solid var(--border); }
+.fc-back { background: linear-gradient(135deg, #0a1628, #0f2040); border: 1px solid var(--accent); transform: rotateY(180deg); }
+.fc-label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.fc-word { font-family: 'Baloo 2', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--text); line-height: 1.4; }
+.fc-back .fc-word { color: var(--accent2); font-size: 1rem; }
+.fc-tap { font-size: .75rem; color: var(--muted); margin-top: 8px; }
+.fc-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.fc-counter { color: var(--muted); font-size: .85rem; font-weight: 700; }
+.fc-progress { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
+.fc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background .3s; }
+.fc-dot.seen { background: var(--accent); }
+.fc-dot.known { background: var(--accent2); }
+
+.result-screen { text-align: center; padding: 20px 0; }
+.result-emoji { font-size: 3rem; margin-bottom: 8px; }
+.result-title { font-family: 'Baloo 2', sans-serif; font-size: 1.4rem; font-weight: 900; color: var(--accent); margin-bottom: 6px; }
+.result-score { font-size: 2.2rem; font-weight: 900; color: var(--accent2); margin-bottom: 16px; }
+.result-breakdown { background: var(--card2); border-radius: 12px; padding: 14px; text-align: left; margin-bottom: 16px; }
+.rb-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: .88rem; }
+.rb-row:last-child { border-bottom: none; }
+
+.mod-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 12px; }
+.badge-regen { background: #4ade80; color: #0a1628; }
+.badge-klima { background: #38bdf8; color: #0a1628; }
+.badge-wueste { background: #fbbf24; color: #0a1628; }
+.badge-beg { background: #c084fc; color: #0a1628; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🌍 Sarah lernt Geografie</h1>
+  <p>Klimazonen · Regenwald · Wüsten · Subtropen · Polargebiete</p>
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('zusammenfassung',this)">📖 Zusammenfassung</button>
+    <button class="tab" onclick="showTab('lueckentext',this)">✏️ Lückentext</button>
+    <button class="tab" onclick="showTab('karteikarten',this)">🃏 Karteikarten</button>
+    <button class="tab" onclick="showTab('test',this)">🎯 Test</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ══════════ ZUSAMMENFASSUNG ══════════ -->
+<div class="section active" id="sec-zusammenfassung">
+
+  <!-- KLIMAZONEN ÜBERBLICK -->
+  <div class="collapsible-header open" onclick="toggleBlock(this)">
+    <span class="collapsible-title">🌐 Klimazonen der Erde – Überblick</span>
+    <span class="collapsible-arrow">▼</span>
+  </div>
+  <div class="collapsible-body open">
+    <div class="rule-box">
+      Die Erde ist in <strong>Klimazonen</strong> eingeteilt – je nach Entfernung vom Äquator ändern sich Temperatur und Niederschlag.
+    </div>
+    <div class="zone-grid">
+      <div class="zone-item">
+        <div class="zone-name zone-regenwald">🌿 Tropischer Regenwald</div>
+        Am Äquator · immer heiß & feucht · keine Jahreszeiten · größte Artenvielfalt der Erde
+      </div>
+      <div class="zone-item">
+        <div class="zone-name zone-tropen">🌦️ Tropen / Savannen</div>
+        Nördlich/südlich des Äquators · Regen- und Trockenzeit · Gräser & Akazien
+      </div>
+      <div class="zone-item">
+        <div class="zone-name zone-wueste">🏜️ Wendekreise / Wüsten</div>
+        Bei 30° N/S · heiß & trocken · kaum Niederschlag · z.B. Sahara
+      </div>
+      <div class="zone-item">
+        <div class="zone-name zone-subtropen">☀️ Subtropen</div>
+        30–40° N/S · Mittelmeerklima: heiße trockene Sommer, milde Regenwinter
+      </div>
+      <div class="zone-item">
+        <div class="zone-name zone-gemasigt">🍂 Gemäßigte Zone</div>
+        40°–Polarkreis · 4 Jahreszeiten · ozeanisch oder kontinental
+      </div>
+      <div class="zone-item">
+        <div class="zone-name zone-polar">❄️ Polar / Subpolar</div>
+        Ab Polarkreis · Tundra & Eis · Permafrost · kaum Vegetation
+      </div>
+    </div>
+    <div class="rule-box yellow">
+      💡 <strong>Merksatz:</strong> Äquator → Wendekreise → Polarkreis = Regenwald → Wüste → Tundra → Eis
+    </div>
+  </div>
+
+  <!-- REGENWALD -->
+  <div class="collapsible-header" onclick="toggleBlock(this)">
+    <span class="collapsible-title">🌿 Tropischer Regenwald</span>
+    <span class="collapsible-arrow">▼</span>
+  </div>
+  <div class="collapsible-body">
+    <div class="rule-box green">
+      📍 <strong>Lage:</strong> Am und um den Äquator (Brasilien, Kongo, Südostasien)
+    </div>
+    <div class="rule-box">
+      🌡️ <strong>Klima:</strong> Immer heiß (~28°C), ganzjährig viel Regen (>2000mm/Jahr), keine Jahreszeiten
+    </div>
+    <div class="rule-box yellow">
+      🌳 <strong>Stockwerke:</strong><br>
+      1. Emergenten (Riesen-Bäume bis 60m)<br>
+      2. Kronendach (geschlossener Baldachin ~30m)<br>
+      3. Unterholz (wenig Licht)<br>
+      4. Krautschicht (Boden)
+    </div>
+    <div class="rule-box orange">
+      ⚠️ <strong>Bedrohung:</strong> Abholzung für Landwirtschaft, Rinderzucht, Palmöl, Holzeinschlag. Der Regenwald ist die „grüne Lunge" der Erde – er produziert Sauerstoff und speichert CO₂.
+    </div>
+    <div class="rule-box red">
+      🔥 <strong>Folgen der Abholzung:</strong> Mehr CO₂ in der Atmosphäre → Klimawandel · Verlust von Artenvielfalt · Bodenerosion · Zerstörung indigener Kulturen
+    </div>
+  </div>
+
+  <!-- WÜSTEN -->
+  <div class="collapsible-header" onclick="toggleBlock(this)">
+    <span class="collapsible-title">🏜️ Wüsten</span>
+    <span class="collapsible-arrow">▼</span>
+  </div>
+  <div class="collapsible-body">
+    <div class="rule-box">
+      Eine Wüste ist ein Gebiet mit <strong>weniger als 250mm Niederschlag</strong> pro Jahr. Es gibt 3 Haupttypen:
+    </div>
+    <div class="zone-grid">
+      <div class="zone-item">
+        <div class="zone-name" style="color:var(--accent3)">Wendekreiswüsten</div>
+        Bei 30° N/S durch absinkende Luft der Passatwinde · Sahara, Arabische Wüste
+      </div>
+      <div class="zone-item">
+        <div class="zone-name" style="color:var(--accent3)">Binnenwüsten</div>
+        Im Inneren von Kontinenten, weit vom Meer · Gobi, Taklamakan
+      </div>
+      <div class="zone-item">
+        <div class="zone-name" style="color:var(--accent3)">Küstenwüsten</div>
+        Durch kalte Meeresströmungen · Atacama (trockenste Wüste der Erde!)
+      </div>
+      <div class="zone-item">
+        <div class="zone-name" style="color:var(--accent3)">Extreme Temperaturen</div>
+        Tag: bis +50°C · Nacht: unter 0°C · Große Tagesamplitude
+      </div>
+    </div>
+    <div class="rule-box yellow">
+      🐪 <strong>Leben in der Wüste:</strong> Kamele, Fennek (Wüstenfuchs), Springmaus, Schlangen. Pflanzen: Kakteen, Dornsträucher. Menschen: Nomaden, Oasen-Siedler.
+    </div>
+    <div class="rule-box orange">
+      💧 <strong>Oase:</strong> Fruchtbare Stelle in der Wüste mit Grundwasser. Wichtige Siedlungs- und Handelspunkte.
+    </div>
+  </div>
+
+  <!-- SUBTROPEN & MITTELMEER -->
+  <div class="collapsible-header" onclick="toggleBlock(this)">
+    <span class="collapsible-title">☀️ Subtropen & Mittelmeerklima</span>
+    <span class="collapsible-arrow">▼</span>
+  </div>
+  <div class="collapsible-body">
+    <div class="rule-box">
+      Die Subtropen liegen zwischen <strong>30° und 40° N/S</strong>. Es gibt zwei Typen:
+    </div>
+    <div class="rule-box green">
+      🫒 <strong>Subtropische Winterregenzone (Mittelmeerklima):</strong><br>
+      Heiße, trockene Sommer · Milde, regnerische Winter · z.B. Spanien, Italien, Griechenland<br>
+      Vegetation: Olivenbäume, Zypressen, Weinreben, Zitruspflanzen
+    </div>
+    <div class="rule-box yellow">
+      🏜️ <strong>Subtropische Trockenzone:</strong><br>
+      Ganzjährig trocken → übergeht in Wüste · Sahel-Zone, Teile Australiens
+    </div>
+    <div class="rule-box orange">
+      ⚠️ <strong>Desertifikation:</strong> Ausbreitung der Wüste in die Sahelzone → Ursachen: Überweidung, Abholzung, Klimawandel
+    </div>
+  </div>
+
+  <!-- GEMÄSSIGTE ZONE -->
+  <div class="collapsible-header" onclick="toggleBlock(this)">
+    <span class="collapsible-title">🍂 Gemäßigte Zone & Ozeanisch/Kontinental</span>
+    <span class="collapsible-arrow">▼</span>
+  </div>
+  <div class="collapsible-body">
+    <div class="rule-box">
+      Die gemäßigte Zone liegt zwischen <strong>40° und dem Polarkreis</strong>. Klares Merkmal: <strong>4 Jahreszeiten</strong>.
+    </div>
+    <div class="zone-grid">
+      <div class="zone-item">
+        <div class="zone-name" style="color:var(--accent)">🌊 Ozeanisches Klima</div>
+        Nähe zum Meer · Temperaturamplitude &lt;20°C · Milde Winter, kühle Sommer · viel Regen · z.B. Westösterreich, England
+      </div>
+      <div class="zone-item">
+        <div class="zone-name" style="color:var(--accent)">🏔️ Kontinentales Klima</div>
+        Weit vom Meer entfernt · Temperaturamplitude &gt;20°C · Kalte Winter, heiße Sommer · wenig Regen · z.B. Ostösterreich, Russland
+      </div>
+    </div>
+    <div class="rule-box yellow">
+      📊 <strong>Temperaturamplitude</strong> = Unterschied zwischen dem wärmsten und kältesten Monat<br>
+      Ozeanisch: unter 20°C · Kontinental: über 20°C
+    </div>
+  </div>
+
+  <!-- POLARGEBIETE -->
+  <div class="collapsible-header" onclick="toggleBlock(this)">
+    <span class="collapsible-title">❄️ Polargebiete & Tundra</span>
+    <span class="collapsible-arrow">▼</span>
+  </div>
+  <div class="collapsible-body">
+    <div class="rule-box purple">
+      📍 <strong>Tundra:</strong> Baumlose Zone zwischen Arktis und Nadelwald · Permafrost · nur 2–3 Monate Vegetationszeit
+    </div>
+    <div class="rule-box">
+      🧊 <strong>Permafrost:</strong> Dauerhaft gefrorener Boden (bis 400m tief). Taut durch Klimawandel auf → setzt gespeichertes CO₂ frei!
+    </div>
+    <div class="rule-box green">
+      🐻 <strong>Tiere der Polargebiete:</strong> Eisbär (Arktis), Pinguin (Antarktis), Robben, Walrosse, Moschusochse, Rentiere
+    </div>
+    <div class="rule-box yellow">
+      ⚠️ <strong>Klimawandel & Polar:</strong> Arktis erwärmt sich 3x schneller als der Rest der Welt → Eis schmilzt → Meeresspiegel steigt → Lebensraum verloren
+    </div>
+  </div>
+
+  <!-- FACHBEGRIFFE -->
+  <div class="collapsible-header" onclick="toggleBlock(this)">
+    <span class="collapsible-title">📚 Wichtige Fachbegriffe</span>
+    <span class="collapsible-arrow">▼</span>
+  </div>
+  <div class="collapsible-body">
+    <table class="geo-table">
+      <tr><th>Begriff</th><th>Erklärung</th></tr>
+      <tr><td class="term">Klimazone</td><td>Gebiet mit ähnlichem Klima, abhängig vom Breitengrad</td></tr>
+      <tr><td class="term">Äquator</td><td>0°-Breitenkreis, heißeste Zone der Erde</td></tr>
+      <tr><td class="term">Wendekreis</td><td>30° N/S – Grenze der tropischen Zone</td></tr>
+      <tr><td class="term">Polarkreis</td><td>66,5° N/S – Beginn der Polarzone</td></tr>
+      <tr><td class="term">Temperaturamplitude</td><td>Differenz zwischen wärmstem und kältestem Monat</td></tr>
+      <tr><td class="term">Ozeanisches Klima</td><td>Meeresbeeinflusst, Amplitude &lt;20°C, feucht</td></tr>
+      <tr><td class="term">Kontinentales Klima</td><td>Weit vom Meer, Amplitude &gt;20°C, trocken</td></tr>
+      <tr><td class="term">Permafrost</td><td>Dauerhaft gefrorener Boden in Polargebieten</td></tr>
+      <tr><td class="term">Tundra</td><td>Baumlose Vegetationszone vor der Arktis</td></tr>
+      <tr><td class="term">Desertifikation</td><td>Ausbreitung von Wüsten durch Klimawandel & Übernutzung</td></tr>
+      <tr><td class="term">Oase</td><td>Fruchtbare Stelle in der Wüste mit Grundwasser</td></tr>
+      <tr><td class="term">Nomaden</td><td>Menschen ohne festen Wohnsitz, ziehen mit Herden umher</td></tr>
+      <tr><td class="term">Passatwinde</td><td>Beständige Winde in den Tropen, erzeugen Wendekreiswüsten</td></tr>
+      <tr><td class="term">Sahelzone</td><td>Übergangszone zwischen Sahara und Savanne in Afrika</td></tr>
+      <tr><td class="term">Zenitalregen</td><td>Regen am Äquator durch aufsteigende Warmluft, täglich</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- ══════════ LÜCKENTEXT ══════════ -->
+<div class="section" id="sec-lueckentext">
+  <div class="card">
+    <div class="select-row">
+      <button class="sel-btn active" id="sel-klima" onclick="selectGapTopic('klima',this)">🌐 Klimazonen</button>
+      <button class="sel-btn" id="sel-regen" onclick="selectGapTopic('regen',this)">🌿 Regenwald</button>
+      <button class="sel-btn" id="sel-wueste" onclick="selectGapTopic('wueste',this)">🏜️ Wüsten</button>
+    </div>
+    <div class="test-progress-bar"><div class="test-progress-fill" id="gap-pbar"></div></div>
+    <div class="test-counter" id="gap-counter">Satz 1 von 10</div>
+    <div id="gap-single">
+      <div class="mod-badge badge-klima" id="gap-badge">Klimazonen</div>
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:16px;" id="gap-instruction">Trage das richtige Wort ein.</p>
+      <div class="test-question" id="gap-display"></div>
+      <input class="gap-input" id="gap-answer" type="text" autocomplete="off" autocorrect="off" spellcheck="false" style="margin-bottom:14px" placeholder="Antwort" onkeydown="if(event.key==='Enter') checkSingleGap()">
+      <div class="test-feedback" id="gap-fb"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" id="gap-check-btn" onclick="checkSingleGap()">Prüfen ✓</button>
+        <button class="btn btn-primary" id="gap-next-btn" onclick="nextSingleGap()" style="display:none">Weiter →</button>
+      </div>
+    </div>
+    <div id="gap-result" style="display:none;text-align:center;padding:10px 0">
+      <div style="font-size:2rem;margin-bottom:8px" id="gap-res-emoji">🎉</div>
+      <div style="font-family:'Baloo 2',sans-serif;font-size:1.2rem;font-weight:800;color:var(--accent);margin-bottom:6px">Fertig!</div>
+      <div style="font-size:1.6rem;font-weight:900;color:var(--accent2);margin-bottom:16px" id="gap-res-score"></div>
+      <button class="btn btn-primary" onclick="startGaps()">Nochmal 🔄</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ KARTEIKARTEN ══════════ -->
+<div class="section" id="sec-karteikarten">
+  <div class="card">
+    <div class="select-row">
+      <button class="sel-btn active" id="fsel-begriffe" onclick="selectFlashTopic('begriffe',this)">📚 Fachbegriffe</button>
+      <button class="sel-btn" id="fsel-zonen" onclick="selectFlashTopic('zonen',this)">🌐 Klimazonen</button>
+      <button class="sel-btn" id="fsel-tiere" onclick="selectFlashTopic('tiere',this)">🐻 Tiere & Pflanzen</button>
+    </div>
+    <div class="fc-nav">
+      <button class="btn btn-secondary" style="padding:7px 14px;font-size:.8rem" onclick="fcPrev()">← Zurück</button>
+      <span class="fc-counter" id="fc-counter">1 / 15</span>
+      <button class="btn btn-primary" style="padding:7px 14px;font-size:.8rem" onclick="fcNext()">Weiter →</button>
+    </div>
+    <div class="fc-progress" id="fc-dots"></div>
+    <div class="flashcard-container">
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div class="fc-front">
+          <div class="fc-label" id="fc-front-label">Begriff</div>
+          <div class="fc-word" id="fc-front-word">Permafrost</div>
+          <div class="fc-tap">👆 tippen zum Umdrehen</div>
+        </div>
+        <div class="fc-back">
+          <div class="fc-label" id="fc-back-label">Erklärung</div>
+          <div class="fc-word" id="fc-back-word">Dauerhaft gefrorener Boden in Polargebieten</div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:14px">
+      <button class="btn btn-secondary" style="font-size:.85rem" onclick="markCard(false)">❌ Noch üben</button>
+      <button class="btn btn-primary" style="font-size:.85rem" onclick="markCard(true)">✅ Kann ich!</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TEST ══════════ -->
+<div class="section" id="sec-test">
+  <div id="test-start">
+    <div class="card" style="text-align:center">
+      <div style="font-size:2rem;margin-bottom:10px">🎯</div>
+      <div style="font-family:'Baloo 2',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:8px">Test starten</div>
+      <div style="color:var(--muted);font-size:.88rem;margin-bottom:16px">20 Fragen · alle Themen gemischt<br>Erst am Schluss siehst du das Ergebnis!</div>
+      <div class="select-row" style="justify-content:center;margin-bottom:16px">
+        <button class="sel-btn active" id="tsel-all" onclick="selectTestTopic('all',this)">Alles</button>
+        <button class="sel-btn" id="tsel-regen" onclick="selectTestTopic('regen',this)">🌿 Regenwald</button>
+        <button class="sel-btn" id="tsel-klima" onclick="selectTestTopic('klima',this)">🌐 Klimazonen</button>
+        <button class="sel-btn" id="tsel-wueste" onclick="selectTestTopic('wueste',this)">🏜️ Wüsten</button>
+        <button class="sel-btn" id="tsel-polar" onclick="selectTestTopic('polar',this)">❄️ Polar</button>
+      </div>
+      <button class="btn btn-primary" onclick="startTest()">Test starten 🚀</button>
+    </div>
+  </div>
+  <div id="test-running" style="display:none">
+    <div class="test-progress-bar"><div class="test-progress-fill" id="test-pbar"></div></div>
+    <div class="test-counter" id="test-counter">Frage 1 von 20</div>
+    <div class="card">
+      <div class="test-question" id="test-q"></div>
+      <div class="test-options" id="test-opts"></div>
+      <div class="test-feedback" id="test-fb"></div>
+      <button class="btn btn-primary" id="test-next" onclick="testNext()" style="display:none">Weiter →</button>
+    </div>
+  </div>
+  <div id="test-result" style="display:none">
+    <div class="card result-screen">
+      <div class="result-emoji" id="res-emoji"></div>
+      <div class="result-title">Test abgeschlossen!</div>
+      <div class="result-score" id="res-score"></div>
+      <div class="result-breakdown" id="res-breakdown"></div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="startTest()">Nochmal 🔄</button>
+        <button class="btn btn-secondary" onclick="showTab('zusammenfassung',null)">Zusammenfassung 📖</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// DATA – LÜCKENTEXT
+// ═══════════════════════════════════════════
+const GAP_KLIMA = [
+  {s:"Die heißeste Klimazone liegt am ___.",a:"Äquator",stammwort:"Äquator",hint:"Am Äquator ist es am heißesten"},
+  {s:"Wüsten entstehen meist in der Nähe der ___.",a:"Wendekreise",stammwort:"Wendekreise",hint:"Bei 30° N/S liegen die Wendekreise"},
+  {s:"Die gemäßigte Zone hat ___ Jahreszeiten.",a:"vier",stammwort:"vier",hint:"Frühling, Sommer, Herbst, Winter"},
+  {s:"Die ___ ist die baumlose Zone vor der Arktis.",a:"Tundra",stammwort:"Tundra",hint:"Baumlose Übergangszone"},
+  {s:"Die Temperaturamplitude ist der Unterschied zwischen dem wärmsten und ___ Monat.",a:"kältesten",stammwort:"kältesten",hint:"Wärmster minus kältester Monat"},
+  {s:"Ozeanisches Klima hat eine Temperaturamplitude von unter ___ Grad.",a:"20",stammwort:"20",hint:"Unter 20°C Amplitude = ozeanisch"},
+  {s:"Der ___ liegt bei 66,5° Nord- und Südbreite.",a:"Polarkreis",stammwort:"Polarkreis",hint:"Beginn der Polarzone"},
+  {s:"Der dauerhaft gefrorene Boden in den Polargebieten heißt ___.",a:"Permafrost",stammwort:"Permafrost",hint:"Dauerhaft gefrorener Boden"},
+  {s:"Kontinentales Klima hat eine Temperaturamplitude von über ___ Grad.",a:"20",stammwort:"20",hint:"Über 20°C Amplitude = kontinental"},
+  {s:"Die Ausbreitung der Wüste nennt man ___.",a:"Desertifikation",stammwort:"Desertifikation",hint:"De-sert-ifi-ka-tion"},
+];
+
+const GAP_REGEN = [
+  {s:"Der tropische Regenwald liegt am ___.",a:"Äquator",stammwort:"Äquator",hint:"Rund um den Äquator"},
+  {s:"Der Regenwald hat mehr als ___ mm Niederschlag pro Jahr.",a:"2000",stammwort:"2000",hint:"Über 2000mm Jahresniederschlag"},
+  {s:"Das oberste Stockwerk des Regenwaldes heißt ___.",a:"Emergenten",stammwort:"Emergenten",hint:"Riesen-Bäume bis 60m Höhe"},
+  {s:"Der tropische Regenwald ist die ___ der Erde.",a:"grüne Lunge",stammwort:"grüne Lunge",hint:"Produziert Sauerstoff, speichert CO₂"},
+  {s:"Die Hauptbedrohung des Regenwaldes ist die ___.",a:"Abholzung",stammwort:"Abholzung",hint:"Rodung für Landwirtschaft"},
+  {s:"Am Äquator regnet es täglich durch den sogenannten ___.",a:"Zenitalregen",stammwort:"Zenitalregen",hint:"Durch aufsteigende Warmluft"},
+  {s:"Im Regenwald gibt es ___ Jahreszeiten.",a:"keine",stammwort:"keine",hint:"Ganzjährig heiß und feucht"},
+  {s:"Palmöl-Plantagen zerstören vor allem den Regenwald in ___.",a:"Südostasien",stammwort:"Südostasien",hint:"Borneo, Sumatra, Malaysia"},
+];
+
+const GAP_WUESTE = [
+  {s:"Eine Wüste hat weniger als ___ mm Niederschlag pro Jahr.",a:"250",stammwort:"250",hint:"Unter 250mm = Wüste"},
+  {s:"Die trockenste Wüste der Erde ist die ___.",a:"Atacama",stammwort:"Atacama",hint:"Küstenwüste in Südamerika"},
+  {s:"Die ___ entsteht durch absinkende Luft der Passatwinde.",a:"Wendekreiswüste",stammwort:"Wendekreiswüste",hint:"Bei 30° N/S durch Passatwinde"},
+  {s:"Eine fruchtbare Stelle in der Wüste mit Wasser nennt man ___.",a:"Oase",stammwort:"Oase",hint:"Wasser in der Wüste"},
+  {s:"Menschen ohne festen Wohnsitz, die mit Herden umherziehen, nennt man ___.",a:"Nomaden",stammwort:"Nomaden",hint:"Ziehen mit ihren Tieren"},
+  {s:"Die Übergangszone zwischen Sahara und Savanne heißt ___.",a:"Sahelzone",stammwort:"Sahelzone",hint:"Sahel = arabisch für Küste/Rand"},
+  {s:"In der Wüste kann die Tagestemperatur über ___ Grad steigen.",a:"50",stammwort:"50",hint:"Bis zu +50°C tagsüber"},
+  {s:"Der bekannteste Wüstenbewohner ist das ___.",a:"Kamel",stammwort:"Kamel",hint:"Hat Höcker als Fettspeicher"},
+];
+
+// ═══════════════════════════════════════════
+// DATA – KARTEIKARTEN
+// ═══════════════════════════════════════════
+const FC_BEGRIFFE = [
+  {front:"Klimazone",back:"Gebiet mit ähnlichem Klima, abhängig vom Breitengrad"},
+  {front:"Temperaturamplitude",back:"Unterschied zwischen dem wärmsten und kältesten Monat eines Jahres"},
+  {front:"Ozeanisches Klima",back:"Meeresbeeinflusst · Amplitude <20°C · feucht · milde Winter"},
+  {front:"Kontinentales Klima",back:"Weit vom Meer · Amplitude >20°C · trocken · kalte Winter, heiße Sommer"},
+  {front:"Permafrost",back:"Dauerhaft gefrorener Boden in Polargebieten (bis 400m tief)"},
+  {front:"Tundra",back:"Baumlose Übergangszone zwischen Arktis und Nadelwald · 2–3 Monate Vegetation"},
+  {front:"Desertifikation",back:"Ausbreitung von Wüsten durch Klimawandel, Überweidung und Abholzung"},
+  {front:"Oase",back:"Fruchtbare Stelle in der Wüste mit Grundwasser · wichtiger Siedlungspunkt"},
+  {front:"Nomaden",back:"Menschen ohne festen Wohnsitz, die mit ihren Herden umherziehen"},
+  {front:"Zenitalregen",back:"Tägliche Regenfälle am Äquator durch aufsteigende Warmluft"},
+  {front:"Passatwinde",back:"Beständige Winde in den Tropen · erzeugen Wendekreiswüsten"},
+  {front:"Sahelzone",back:"Übergangszone zwischen Sahara und Savanne in Afrika · stark durch Trockenheit gefährdet"},
+  {front:"Emergenten",back:"Oberstes Stockwerk des Regenwaldes · Riesen-Bäume bis 60m"},
+  {front:"Wendekreis",back:"30° N/S · Grenze der tropischen Zone · trocken durch absinkende Luft"},
+  {front:"Polarkreis",back:"66,5° N/S · Beginn der Polarzone · Mitternachtssonne möglich"},
+];
+
+const FC_ZONEN = [
+  {front:"🌿 Tropischer Regenwald",back:"Lage: am Äquator\nKlima: immer heiß & feucht\nNiederschlag: >2000mm\nKeine Jahreszeiten"},
+  {front:"🌦️ Savannen / Tropen",back:"Lage: nördlich/südlich Äquator\nKlima: Regen- & Trockenzeit\nVegetation: Gräser, Akazien"},
+  {front:"🏜️ Wüsten (Wendekreise)",back:"Lage: ~30° N/S\nKlima: heiß & trocken\nNiederschlag: <250mm\nBeispiel: Sahara"},
+  {front:"☀️ Mittelmeerklima",back:"Lage: 30–40° N/S\nKlima: heiße trockene Sommer\nmilde Regenwinter\nz.B. Spanien, Griechenland"},
+  {front:"🍂 Gemäßigte Zone",back:"Lage: 40°–Polarkreis\nKlima: 4 Jahreszeiten\nOzeanisch oder kontinental"},
+  {front:"❄️ Polargebiete / Tundra",back:"Lage: ab Polarkreis\nKlima: extrem kalt\nPermafrost\nkaum Vegetation"},
+];
+
+const FC_TIERE = [
+  {front:"🐻‍❄️ Eisbär",back:"Lebensraum: Arktis (Nordpol)\nAnpassung: dickes Fell, Fettschicht\nBedroht durch: Klimawandel (Eis schmilzt)"},
+  {front:"🐧 Pinguin",back:"Lebensraum: Antarktis (Südpol)\nKann NICHT fliegen\nSchwimmt sehr gut"},
+  {front:"🐪 Kamel",back:"Lebensraum: Wüste\nAnpassung: Höcker (Fettspeicher), weite Nüstern\nKann ohne Wasser mehrere Tage überleben"},
+  {front:"🦊 Fennek (Wüstenfuchs)",back:"Lebensraum: Sahara\nAnpassung: Riesige Ohren zur Kühlung\nJagt nachts"},
+  {front:"🌿 Regenwald – Tiere",back:"Jaguar, Ara, Anakonda, Faultier, Tukan\nMehr als 50% aller Tierarten leben im Regenwald"},
+  {front:"🦌 Rentier / Karibu",back:"Lebensraum: Tundra\nWandert je nach Jahreszeit\nMenschen: Samen (Lappen)"},
+];
+
+// ═══════════════════════════════════════════
+// DATA – TEST
+// ═══════════════════════════════════════════
+const TEST_ALL = [
+  {q:"Welche Klimazone liegt direkt am Äquator?",opts:["Wüste","Tropischer Regenwald","Tundra","Gemäßigte Zone"],a:1,cat:"Klimazonen",e:"Am Äquator ist es heiß und feucht → tropischer Regenwald"},
+  {q:"Was ist die Temperaturamplitude?",opts:["Die Durchschnittstemperatur eines Jahres","Der Unterschied zwischen wärmstem und kältestem Monat","Die maximale Tagestemperatur","Die Menge des Niederschlags"],a:1,cat:"Klimazonen",e:"Amplitude = wärmster Monat minus kältester Monat"},
+  {q:"Welches Klima hat eine Temperaturamplitude unter 20°C?",opts:["Kontinentales Klima","Wüstenklima","Ozeanisches Klima","Polarklima"],a:2,cat:"Klimazonen",e:"Ozeanisch = meeresbeeinflusst, ausgeglichene Temperaturen"},
+  {q:"Was ist Permafrost?",opts:["Ein Gletscher in den Alpen","Dauerhaft gefrorener Boden in Polargebieten","Gefrorenes Meerwasser","Schnee auf Berggipfeln"],a:1,cat:"Polar",e:"Permafrost = dauerhaft gefrorener Boden, bis 400m tief"},
+  {q:"Wie viel Niederschlag hat eine Wüste pro Jahr?",opts:["Mehr als 2000mm","Weniger als 250mm","Genau 1000mm","Mehr als 500mm"],a:1,cat:"Wüsten",e:"Wüste = weniger als 250mm Niederschlag pro Jahr"},
+  {q:"Welche ist die trockenste Wüste der Erde?",opts:["Sahara","Gobi","Atacama","Namib"],a:2,cat:"Wüsten",e:"Die Atacama in Südamerika ist die trockenste Wüste der Erde"},
+  {q:"Was ist Desertifikation?",opts:["Aufforstung von Wüstengebieten","Ausbreitung der Wüste durch Klimawandel und Übernutzung","Bewässerung von Wüsten","Abkühlung der Tropen"],a:1,cat:"Wüsten",e:"Desertifikation = Ausbreitung der Wüste"},
+  {q:"Wo liegt die Tundra?",opts:["Am Äquator","In den Tropen","Zwischen Arktis und Nadelwald","In der Sahara"],a:2,cat:"Polar",e:"Tundra = baumlose Zone zwischen Arktis und nördlichem Nadelwald"},
+  {q:"Was ist eine Oase?",opts:["Ein Sandsturm","Eine fruchtbare Stelle in der Wüste mit Wasser","Ein Wüstentier","Eine Bergkette"],a:1,cat:"Wüsten",e:"Oase = Wasser in der Wüste → Siedlung möglich"},
+  {q:"Was sind Nomaden?",opts:["Stadtbewohner in der Wüste","Bauern mit festen Feldern","Menschen die mit Herden umherziehen","Forscher in der Antarktis"],a:2,cat:"Wüsten",e:"Nomaden = kein fester Wohnsitz, ziehen mit Tieren"},
+  {q:"Was ist das Mittelmeerklima?",opts:["Immer heiß und feucht","Heiße trockene Sommer und milde Regenwinter","Ganzjährig kalt","Starke Schneefälle im Sommer"],a:1,cat:"Subtropen",e:"Mittelmeer = subtropische Winterregenzone"},
+  {q:"Wie viele Stockwerke hat der tropische Regenwald?",opts:["2","3","4","5"],a:2,cat:"Regenwald",e:"Emergenten, Kronendach, Unterholz, Krautschicht = 4 Stockwerke"},
+  {q:"Welcher Pol hat Eisbären?",opts:["Südpol (Antarktis)","Nordpol (Arktis)","Beide Pole","Keiner der Pole"],a:1,cat:"Polar",e:"Eisbären leben nur in der Arktis (Nordpol)"},
+  {q:"Was ist der Zenitalregen?",opts:["Regen in der Wüste","Tägliche Regenfälle am Äquator durch aufsteigende Warmluft","Schneefall in der Tundra","Monsunregen in Asien"],a:1,cat:"Regenwald",e:"Am Äquator steigt Warmluft auf → kühlt ab → Regen täglich"},
+  {q:"Was ist die Sahelzone?",opts:["Ein Gebirge in Afrika","Eine Wüste in Asien","Übergangszone zwischen Sahara und Savanne","Ein Regenwald in Amerika"],a:2,cat:"Subtropen",e:"Sahel = arabisch für Rand/Küste → Übergang zur Wüste"},
+  {q:"Welches Tier lebt in der Antarktis (Südpol)?",opts:["Eisbär","Rentier","Pinguin","Walross"],a:2,cat:"Polar",e:"Pinguine leben nur in der Antarktis – Eisbären nur in der Arktis!"},
+  {q:"Was passiert wenn der Permafrost taut?",opts:["Es wird kälter","Gespeichertes CO₂ wird freigesetzt und verstärkt den Klimawandel","Es regnet mehr","Neue Pflanzen wachsen sofort"],a:1,cat:"Polar",e:"Im Permafrost ist viel CO₂ gespeichert → Tauen → Klimawandel verstärkt sich"},
+  {q:"Was ist die 'grüne Lunge' der Erde?",opts:["Die Tundra","Der Ozean","Der tropische Regenwald","Die Savannen"],a:2,cat:"Regenwald",e:"Der Regenwald produziert Sauerstoff und speichert CO₂"},
+  {q:"Welcher Breitengrad ist der Polarkreis?",opts:["30° N/S","45° N/S","60° N/S","66,5° N/S"],a:3,cat:"Klimazonen",e:"Polarkreis liegt bei 66,5° Nord- und Südbreite"},
+  {q:"Was sind Passatwinde?",opts:["Stürme in der Arktis","Beständige Winde in den Tropen, die Wendekreiswüsten erzeugen","Winde in den Alpen","Monsunwinde in Asien"],a:1,cat:"Wüsten",e:"Passatwinde = beständige Tropenwinde → absinkende Luft bei 30° → Wüste"},
+];
+
+// ═══════════════════════════════════════════
+// TABS & COLLAPSIBLE
+// ═══════════════════════════════════════════
+function showTab(name,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  if(btn)btn.classList.add('active');
+  else{const tabs={zusammenfassung:0,lueckentext:1,karteikarten:2,test:3};document.querySelectorAll('.tab')[tabs[name]]?.classList.add('active');}
+}
+function toggleBlock(h){const b=h.nextElementSibling;const o=h.classList.contains('open');h.classList.toggle('open',!o);b.classList.toggle('open',!o);}
+
+// ═══════════════════════════════════════════
+// LÜCKENTEXT
+// ═══════════════════════════════════════════
+let gapTopic='klima',gapQueue=[],gapIdx=0,gapCorrect=0;
+
+function selectGapTopic(t,btn){
+  gapTopic=t;
+  document.querySelectorAll('.sel-btn[id^="sel-"]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  startGaps();
+}
+function startGaps(){
+  const data=gapTopic==='klima'?GAP_KLIMA:gapTopic==='regen'?GAP_REGEN:GAP_WUESTE;
+  gapQueue=shuffle([...data]);gapIdx=0;gapCorrect=0;
+  document.getElementById('gap-result').style.display='none';
+  document.getElementById('gap-single').style.display='block';
+  const badges={klima:['Klimazonen','badge-klima'],regen:['Regenwald','badge-regen'],wueste:['Wüsten','badge-wueste']};
+  const[label,cls]=badges[gapTopic];
+  document.getElementById('gap-badge').textContent=label;
+  document.getElementById('gap-badge').className='mod-badge '+cls;
+  showGapQuestion();
+}
+function showGapQuestion(){
+  const item=gapQueue[gapIdx];
+  const total=gapQueue.length;
+  document.getElementById('gap-pbar').style.width=(gapIdx/total*100)+'%';
+  document.getElementById('gap-counter').textContent=`Satz ${gapIdx+1} von ${total}`;
+  const sentence=item.s.replace('___','<span style="color:var(--accent);font-weight:800">___</span>');
+  document.getElementById('gap-display').innerHTML=sentence;
+  const inp=document.getElementById('gap-answer');
+  inp.value='';inp.disabled=false;inp.className='gap-input';
+  inp.style.width=item.a.length>12?'240px':'180px';
+  document.getElementById('gap-fb').className='test-feedback';
+  document.getElementById('gap-check-btn').style.display='inline-block';
+  document.getElementById('gap-next-btn').style.display='none';
+  setTimeout(()=>inp.focus(),100);
+}
+function checkSingleGap(){
+  const item=gapQueue[gapIdx];
+  const inp=document.getElementById('gap-answer');
+  const val=inp.value.trim().toLowerCase();
+  const correct=val===item.a.toLowerCase();
+  inp.disabled=true;inp.className='gap-input '+(correct?'correct':'wrong');
+  const fb=document.getElementById('gap-fb');
+  if(correct){gapCorrect++;fb.className='test-feedback show good';fb.textContent='✅ Richtig!';}
+  else{fb.className='test-feedback show bad';fb.innerHTML=`❌ Richtig wäre: <strong style="color:var(--accent2)">${item.a}</strong> · ${item.hint}`;}
+  document.getElementById('gap-check-btn').style.display='none';
+  document.getElementById('gap-next-btn').style.display='inline-block';
+}
+function nextSingleGap(){gapIdx++;if(gapIdx>=gapQueue.length)showGapResult();else showGapQuestion();}
+function showGapResult(){
+  document.getElementById('gap-single').style.display='none';
+  document.getElementById('gap-result').style.display='block';
+  const pct=Math.round(gapCorrect/gapQueue.length*100);
+  document.getElementById('gap-res-emoji').textContent=pct>=85?'🏆':pct>=65?'⭐':'💪';
+  document.getElementById('gap-res-score').textContent=`${gapCorrect} / ${gapQueue.length} richtig (${pct}%)`;
+  document.getElementById('gap-pbar').style.width='100%';
+  document.getElementById('gap-counter').textContent='Fertig!';
+}
+
+// ═══════════════════════════════════════════
+// KARTEIKARTEN
+// ═══════════════════════════════════════════
+let fcTopic='begriffe',fcCards=[],fcIdx=0,fcKnown=new Set(),fcSeen=new Set();
+
+function selectFlashTopic(t,btn){
+  fcTopic=t;
+  document.querySelectorAll('.sel-btn[id^="fsel-"]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  loadFlashCards();
+}
+function loadFlashCards(){
+  if(fcTopic==='begriffe')fcCards=FC_BEGRIFFE;
+  else if(fcTopic==='zonen')fcCards=FC_ZONEN;
+  else fcCards=FC_TIERE;
+  fcIdx=0;fcKnown=new Set();fcSeen=new Set();
+  document.getElementById('flashcard').classList.remove('flipped');
+  const labels={begriffe:['Begriff','Erklärung'],zonen:['Klimazone','Klima & Lage'],tiere:['Tier','Lebensraum & Anpassung']};
+  const[fl,bl]=labels[fcTopic];
+  document.getElementById('fc-front-label').textContent=fl;
+  document.getElementById('fc-back-label').textContent=bl;
+  updateFlashCard();buildDots();
+}
+function updateFlashCard(){
+  const c=fcCards[fcIdx];
+  document.getElementById('fc-front-word').textContent=c.front;
+  document.getElementById('fc-back-word').textContent=c.back;
+  document.getElementById('fc-counter').textContent=`${fcIdx+1} / ${fcCards.length}`;
+  document.getElementById('flashcard').classList.remove('flipped');
+  fcSeen.add(fcIdx);updateDots();
+}
+function flipCard(){document.getElementById('flashcard').classList.toggle('flipped');}
+function fcNext(){if(fcIdx<fcCards.length-1){fcIdx++;updateFlashCard();}}
+function fcPrev(){if(fcIdx>0){fcIdx--;updateFlashCard();}}
+function markCard(k){if(k)fcKnown.add(fcIdx);else fcKnown.delete(fcIdx);updateDots();fcNext();}
+function buildDots(){
+  const c=document.getElementById('fc-dots');c.innerHTML='';
+  fcCards.forEach((_,i)=>{const d=document.createElement('div');d.className='fc-dot';d.id=`dot-${i}`;c.appendChild(d);});
+}
+function updateDots(){
+  fcCards.forEach((_,i)=>{
+    const d=document.getElementById(`dot-${i}`);if(!d)return;
+    if(fcKnown.has(i))d.className='fc-dot known';
+    else if(fcSeen.has(i))d.className='fc-dot seen';
+    else d.className='fc-dot';
+  });
+}
+
+// ═══════════════════════════════════════════
+// TEST
+// ═══════════════════════════════════════════
+let testTopic='all',testQueue=[],testIdx=0,testAnswers=[];
+
+function selectTestTopic(t,btn){
+  testTopic=t;
+  document.querySelectorAll('.sel-btn[id^="tsel-"]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=~~(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function startTest(){
+  const catMap={regen:'Regenwald',klima:'Klimazonen',wueste:'Wüsten',polar:'Polar',subtropen:'Subtropen'};
+  let pool=testTopic==='all'?TEST_ALL:TEST_ALL.filter(q=>q.cat===catMap[testTopic]||q.cat==='Klimazonen');
+  if(testTopic!=='all')pool=TEST_ALL.filter(q=>q.cat===catMap[testTopic]);
+  testQueue=shuffle(pool).slice(0,20);
+  testIdx=0;testAnswers=[];
+  document.getElementById('test-start').style.display='none';
+  document.getElementById('test-result').style.display='none';
+  document.getElementById('test-running').style.display='block';
+  showTestQuestion();
+}
+function showTestQuestion(){
+  const q=testQueue[testIdx];
+  document.getElementById('test-pbar').style.width=(testIdx/testQueue.length*100)+'%';
+  document.getElementById('test-counter').textContent=`Frage ${testIdx+1} von ${testQueue.length}`;
+  document.getElementById('test-q').textContent=q.q;
+  const optsEl=document.getElementById('test-opts');
+  optsEl.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='test-opt';btn.textContent=opt;
+    btn.onclick=()=>selectTestAnswer(i);
+    optsEl.appendChild(btn);
+  });
+  document.getElementById('test-fb').className='test-feedback';
+  document.getElementById('test-next').style.display='none';
+}
+function selectTestAnswer(i){
+  if(document.getElementById('test-next').style.display==='block')return;
+  const q=testQueue[testIdx];
+  setTimeout(()=>{
+    const btns=document.querySelectorAll('.test-opt');
+    btns.forEach(b=>b.disabled=true);
+    const correct=i===q.a;
+    testAnswers.push({q,correct});
+    btns[q.a].className='test-opt correct';
+    if(!correct)btns[i].className='test-opt wrong';
+    const fb=document.getElementById('test-fb');
+    fb.className=`test-feedback show ${correct?'good':'bad'}`;
+    fb.textContent=correct?'✅ Richtig!':`❌ Richtig: "${q.opts[q.a]}" · ${q.e}`;
+    document.getElementById('test-next').style.display='block';
+  },300);
+}
+function testNext(){testIdx++;if(testIdx>=testQueue.length)showTestResult();else showTestQuestion();}
+function showTestResult(){
+  document.getElementById('test-running').style.display='none';
+  document.getElementById('test-result').style.display='block';
+  const correct=testAnswers.filter(a=>a.correct).length;
+  const total=testAnswers.length;
+  const pct=Math.round(correct/total*100);
+  document.getElementById('res-emoji').textContent=pct>=85?'🏆':pct>=70?'⭐':pct>=50?'💪':'📖';
+  document.getElementById('res-score').textContent=`${correct} / ${total} (${pct}%)`;
+  const cats={};
+  testAnswers.forEach(a=>{
+    if(!cats[a.q.cat])cats[a.q.cat]={c:0,t:0};
+    cats[a.q.cat].t++;if(a.correct)cats[a.q.cat].c++;
+  });
+  let html='';
+  Object.entries(cats).forEach(([cat,v])=>{html+=`<div class="rb-row"><span>${cat}</span><span style="color:var(--accent2)">${v.c}/${v.t}</span></div>`;});
+  document.getElementById('res-breakdown').innerHTML=html;
+}
+
+// INIT
+startGaps();
+loadFlashCards();
+</script>
+</body>
+</html>
