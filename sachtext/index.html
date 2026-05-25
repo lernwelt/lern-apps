@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📰 Sarah lernt Sachtexte</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a1f1a;
+  --card: #0f2d26;
+  --card2: #163830;
+  --border: #1f4f44;
+  --accent: #34d399;
+  --accent2: #38bdf8;
+  --accent3: #fbbf24;
+  --orange: #fb923c;
+  --red: #f87171;
+  --purple: #c084fc;
+  --text: #ecfdf5;
+  --muted: #6ee7b7;
+  --r: 14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+.header {
+  background: linear-gradient(135deg, #065f46 0%, #0891b2 100%);
+  padding: 20px 20px 0 20px; text-align: center;
+}
+.header h1 { font-family: 'Baloo 2', sans-serif; font-size: 1.6rem; font-weight: 900; color: white; margin-bottom: 4px; }
+.header p { font-size: .85rem; color: rgba(255,255,255,.8); margin-bottom: 16px; }
+
+.tabs { display: flex; gap: 4px; justify-content: center; padding: 0 10px; flex-wrap: wrap; }
+.tab { padding: 10px 14px; border-radius: 10px 10px 0 0; border: none; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .8rem; cursor: pointer; color: rgba(255,255,255,.7); background: rgba(255,255,255,.1); transition: all .2s; white-space: nowrap; }
+.tab.active { background: var(--bg); color: var(--accent); }
+
+.content { padding: 20px 16px; max-width: 680px; margin: 0 auto; }
+.section { display: none; }
+.section.active { display: block; }
+
+/* COLLAPSIBLE */
+.collapsible-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; padding: 14px 18px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); margin-bottom: 6px; transition: background .18s; }
+.collapsible-header:hover { background: var(--card2); }
+.collapsible-header.open { border-radius: var(--r) var(--r) 0 0; border-bottom: none; margin-bottom: 0; }
+.collapsible-title { font-family: 'Baloo 2', sans-serif; font-size: 1rem; font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 8px; }
+.collapsible-arrow { color: var(--muted); font-size: .9rem; transition: transform .3s; }
+.collapsible-header.open .collapsible-arrow { transform: rotate(180deg); }
+.collapsible-body { background: var(--card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--r) var(--r); padding: 0 18px; max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .35s ease; margin-bottom: 10px; }
+.collapsible-body.open { max-height: 3000px; padding: 14px 18px 18px 18px; }
+
+/* CARDS & RULES */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 16px 18px; margin-bottom: 14px; }
+.rule-box { background: var(--card2); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; border-left: 3px solid var(--accent); font-size: .9rem; line-height: 1.7; }
+.rule-box.blue { border-left-color: var(--accent2); }
+.rule-box.yellow { border-left-color: var(--accent3); }
+.rule-box.orange { border-left-color: var(--orange); }
+.rule-box.purple { border-left-color: var(--purple); }
+
+.ab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
+.ab-item { background: var(--card2); border-radius: 8px; padding: 10px 12px; font-size: .85rem; line-height: 1.6; }
+.ab-key { font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1rem; margin-bottom: 4px; }
+.ab-key.ort { color: var(--accent); }
+.ab-key.zeit { color: var(--accent2); }
+.ab-key.art { color: var(--accent3); }
+.ab-key.grund { color: var(--orange); }
+
+.zeit-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.zeit-table th { text-align: left; color: var(--muted); font-size: .72rem; text-transform: uppercase; letter-spacing: 1px; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.zeit-table td { padding: 7px 8px; border-bottom: 1px solid var(--border); }
+.zeit-table tr:last-child td { border-bottom: none; }
+.zeit-table .zf { color: var(--accent); font-weight: 700; }
+.zeit-table .bsp { color: var(--accent2); }
+.zeit-table .suf { color: var(--muted); font-size: .8rem; }
+
+.vocab-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.vocab-table th { text-align: left; color: var(--muted); font-size: .72rem; text-transform: uppercase; letter-spacing: 1px; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.vocab-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.vocab-table tr:last-child td { border-bottom: none; }
+.vocab-table .term { color: var(--accent); font-weight: 700; }
+
+.schritte { counter-reset: step; display: flex; flex-direction: column; gap: 8px; }
+.schritt { display: flex; gap: 12px; align-items: flex-start; background: var(--card2); border-radius: 10px; padding: 10px 14px; font-size: .9rem; line-height: 1.5; }
+.schritt-nr { background: var(--accent); color: #0a1f1a; font-weight: 900; font-family: 'Baloo 2', sans-serif; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: .85rem; }
+
+/* LESETEXT */
+.lesetext { background: var(--card2); border-radius: 12px; padding: 14px 16px; border-left: 4px solid var(--accent2); font-size: .95rem; line-height: 1.8; margin-bottom: 14px; }
+.lesetext-title { font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1rem; color: var(--accent2); margin-bottom: 8px; }
+.lesetext-source { font-size: .72rem; color: var(--muted); margin-top: 8px; font-style: italic; }
+
+/* GAP / TEST */
+.test-progress-bar { background: var(--border); border-radius: 10px; height: 6px; margin-bottom: 6px; }
+.test-progress-fill { background: linear-gradient(90deg, var(--accent), var(--accent2)); height: 6px; border-radius: 10px; transition: width .4s; }
+.test-counter { font-size: .78rem; color: var(--muted); text-align: right; margin-bottom: 16px; }
+.test-question { font-size: 1.02rem; font-weight: 700; color: var(--text); margin-bottom: 12px; line-height: 1.5; }
+.test-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.test-opt { padding: 11px 16px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--card2); color: var(--text); font-family: 'Nunito', sans-serif; font-weight: 600; font-size: .93rem; cursor: pointer; text-align: left; transition: all .18s; line-height: 1.4; }
+.test-opt:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.test-opt.correct { border-color: var(--accent); background: rgba(52,211,153,.1); color: var(--accent); }
+.test-opt.wrong { border-color: var(--red); background: rgba(248,113,113,.1); color: var(--red); }
+.test-opt:disabled { cursor: default; }
+.test-feedback { border-radius: 10px; padding: 10px 14px; font-weight: 700; font-size: .88rem; margin-bottom: 12px; display: none; line-height: 1.5; }
+.test-feedback.show { display: block; }
+.test-feedback.good { background: rgba(52,211,153,.1); color: var(--accent); border: 1px solid var(--accent); }
+.test-feedback.bad { background: rgba(248,113,113,.1); color: var(--red); border: 1px solid var(--red); }
+
+/* CHIPS (Schlüsselwörter) */
+.chips-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.chip { padding: 8px 14px; border-radius: 30px; border: 2px solid var(--border); background: var(--card2); font-family: 'Nunito', sans-serif; font-weight: 700; font-size: .88rem; cursor: pointer; transition: all .18s; color: var(--text); }
+.chip.sel { border-color: var(--accent2); background: rgba(56,189,248,.15); color: var(--accent2); }
+.chip.correct { border-color: var(--accent); background: rgba(52,211,153,.15); color: var(--accent); }
+.chip.wrong { border-color: var(--red); background: rgba(248,113,113,.1); color: var(--red); text-decoration: line-through; }
+.chip.missed { border-color: var(--accent3); background: rgba(251,191,36,.1); color: var(--accent3); }
+
+/* GAP INPUT */
+.gap-input { background: var(--card2); border: 2px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'Nunito', sans-serif; font-weight: 700; font-size: .95rem; padding: 6px 12px; width: 180px; text-align: center; outline: none; transition: border-color .2s; }
+.gap-input:focus { border-color: var(--accent); }
+.gap-input.correct { border-color: var(--accent); background: rgba(52,211,153,.1); color: var(--accent); }
+.gap-input.wrong { border-color: var(--red); background: rgba(248,113,113,.1); color: var(--red); }
+
+/* BUTTONS */
+.btn { padding: 11px 24px; border-radius: 30px; border: none; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .95rem; cursor: pointer; transition: all .2s; }
+.btn-primary { background: var(--accent); color: #0a1f1a; }
+.btn-primary:hover { background: #6ee7b7; }
+.btn-secondary { background: var(--card2); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+.sel-btn { padding: 7px 14px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--card2); color: var(--muted); font-family: 'Nunito', sans-serif; font-weight: 700; font-size: .8rem; cursor: pointer; transition: all .18s; }
+.sel-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(52,211,153,.08); }
+.select-row { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+
+/* FLASHCARD */
+.flashcard-container { perspective: 1000px; margin-bottom: 16px; }
+.flashcard { width: 100%; min-height: 160px; position: relative; transform-style: preserve-3d; transition: transform .5s; cursor: pointer; }
+.flashcard.flipped { transform: rotateY(180deg); }
+.fc-front, .fc-back { position: absolute; width: 100%; min-height: 160px; backface-visibility: hidden; border-radius: var(--r); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 20px; text-align: center; }
+.fc-front { background: linear-gradient(135deg, #0f2d26, #163830); border: 1px solid var(--border); }
+.fc-back { background: linear-gradient(135deg, #0a1f1a, #0f2d26); border: 1px solid var(--accent); transform: rotateY(180deg); }
+.fc-label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.fc-word { font-family: 'Baloo 2', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--text); line-height: 1.4; }
+.fc-back .fc-word { color: var(--accent); font-size: 1.1rem; }
+.fc-tap { font-size: .75rem; color: var(--muted); margin-top: 8px; }
+.fc-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.fc-counter { color: var(--muted); font-size: .85rem; font-weight: 700; }
+.fc-progress { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
+.fc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background .3s; }
+.fc-dot.seen { background: var(--accent2); }
+.fc-dot.known { background: var(--accent); }
+
+.result-screen { text-align: center; padding: 20px 0; }
+.result-emoji { font-size: 3rem; margin-bottom: 8px; }
+.result-title { font-family: 'Baloo 2', sans-serif; font-size: 1.4rem; font-weight: 900; color: var(--accent); margin-bottom: 6px; }
+.result-score { font-size: 2.2rem; font-weight: 900; color: var(--accent); margin-bottom: 16px; }
+.result-breakdown { background: var(--card2); border-radius: 12px; padding: 14px; text-align: left; margin-bottom: 16px; }
+.rb-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: .88rem; }
+.rb-row:last-child { border-bottom: none; }
+
+.mod-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 12px; color: #0a1f1a; }
+.badge-schluessel { background: var(--accent2); color: white; }
+.badge-text { background: var(--accent); }
+.badge-ab { background: var(--accent3); color: #0a1f1a; }
+.badge-zeit { background: var(--purple); color: white; }
+
+.hint-note { font-size: .78rem; color: var(--muted); margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📰 Sarah lernt Sachtexte</h1>
+  <p>Klimawandel · Meere · Adverbialbestimmungen · Zeitformen</p>
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('zusammenfassung',this)">📖 Zusammenfassung</button>
+    <button class="tab" onclick="showTab('lueckentext',this)">✏️ Lückentext</button>
+    <button class="tab" onclick="showTab('karteikarten',this)">🃏 Karteikarten</button>
+    <button class="tab" onclick="showTab('test',this)">🎯 Test</button>
+    <button class="tab" onclick="showTab('lesetraining',this)">📚 Lese-Training</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════ ZUSAMMENFASSUNG ══════════════════════════════ -->
+<div class="section active" id="sec-zusammenfassung">
+
+  <!-- SCHLÜSSELWÖRTER -->
+  <div class="collapsible-header open" onclick="toggleBlock(this)">
+    <span class="collapsible-title">🔑 Schlüsselwörter & Sachtext schreiben</span>
+    <span class="collapsible-arrow">▼</span>
+  </div>
+  <div class="collapsible-body open">
+    <div class="rule-box">
+      <strong style="color:var(--accent)">Schlüsselwörter</strong> sind die wichtigsten Wörter in einem Text. Sie drücken das Thema und die Kernaussagen aus.
+    </div>
+    <div class="rule-box blue">
+      💡 <strong>Wie erkenne ich Schlüsselwörter?</strong><br>
+      → Sie kommen mehrmals vor<br>
+      → Sie stehen oft in Überschriften<br>
+      → Ohne sie würde man das Thema nicht verstehen<br>
+      → Fachbegriffe sind fast immer Schlüsselwörter
+    </div>
+    <div class="rule-box yellow">
+      ⚠️ <strong>Was sind KEINE Schlüsselwörter?</strong><br>
+      → Füllwörter wie „und", „aber", „auch", „sehr"<br>
+      → Allgemeine Adjektive wie „groß", „warm", „schnell"<br>
+      → Zu viele Wörter markieren → nur das Wichtigste!
+    </div>
+    <div style="margin-top:10px;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:.9rem;color:var(--accent);margin-bottom:8px">Sachtext schreiben – Schritt für Schritt:</div>
+    <div class="schritte">
+      <div class="schritt"><span class="schritt-nr">1</span>Text lesen und Schlüsselwörter markieren</div>
+      <div class="schritt"><span class="schritt-nr">2</span>Mindmap mit den Schlüsselwörtern erstellen</div>
+      <div class="schritt"><span class="schritt-nr">3</span>Sinnabschnitte in sinnvoller Reihenfolge nummerieren</div>
+      <div class="schritt"><span class="schritt-nr">4</span>Text in eigenen Worten schreiben (kein Abschreiben!)</div>
+      <div class="schritt"><span class="schritt-nr">5</span>Nur Fachbegriffe aus dem Originaltext übernehmen</div>
+      <div class="schritt"><span class="schritt-nr">6</span>Sachlich, klar und eindeutig formulieren – keine eigene Meinung!</div>
+    </div>
+  </div>
+
+  <!-- ADVERBIALBESTIMMUNGEN -->
+  <div class="collapsible-header" onclick="toggleBlock(this)">
+    <span class="collapsible-title">📍 Adverbialbestimmungen</span>
+    <span class="collapsible-arrow">▼</span>
+  </div>
+  <div class="collapsible-body">
+    <div class="rule-box">
+      Adverbialbestimmungen machen Sätze <strong>genauer</strong>. Man fragt danach mit Fragewörtern.
+    </div>
+    <div class="ab-grid">
+      <div class="ab-item">
+        <div class="ab-key ort">ORT</div>
+        Wo? Wohin? Woher?<br>
+        <span style="color:var(--muted);font-size:.82rem">in den Wäldern · an der Küste · in Tirol</span>
+      </div>
+      <div class="ab-item">
+        <div class="ab-key zeit">ZEIT</div>
+        Wann? Wie lange? Seit wann?<br>
+        <span style="color:var(--muted);font-size:.82rem">seit Jahrzehnten · im 19. Jahrhundert · heute</span>
+      </div>
+      <div class="ab-item">
+        <div class="ab-key art">ART & WEISE</div>
+        Wie? Womit? Auf welche Art?<br>
+        <span style="color:var(--muted);font-size:.82rem">erschreckend schnell · mit dem Netz · talabwärts</span>
+      </div>
+      <div class="ab-item">
+        <div class="ab-key grund">GRUND</div>
+        Warum? Weshalb? Weswegen?<br>
+        <span style="color:var(--muted);font-size:.82rem">wegen der Erderwärmung · durch Unwetter</span>
+      </div>
+    </div>
+    <div class="rule-box blue">
+      💡 <strong>Beispiel:</strong> „Weltweit werden durch Unwetter Ernten zerstört."<br>
+      → <em>Weltweit</em> = Ort · <em>durch Unwetter</em> = Grund
+    </div>
+  </div>
+
+  <!-- ZEITFORMEN -->
+  <div class="collapsible-header" onclick="toggleBlock(this)">
+    <span class="collapsible-title">⏳ Zeitstufen & Zeitformen</span>
+    <span class="collapsible-arrow">▼</span>
+  </div>
+  <div class="collapsible-body">
+    <div class="rule-box">
+      Es gibt 3 Zeitstufen: <strong style="color:var(--accent3)">Vergangenes</strong> · <strong style="color:var(--accent2)">Gegenwärtiges</strong> · <strong style="color:var(--red)">Zukünftiges</strong>
+    </div>
+    <table class="zeit-table">
+      <tr><th>Zeitform</th><th>Zeitstufe</th><th>Beispiel</th></tr>
+      <tr><td class="zf">Präteritum</td><td><span style="color:var(--accent3)">Vergangen</span></td><td class="bsp">Es regnete stark.</td></tr>
+      <tr><td class="zf">Perfekt</td><td><span style="color:var(--accent3)">Vergangen</span></td><td class="bsp">Es hat geregnet.</td></tr>
+      <tr><td class="zf">Präsens</td><td><span style="color:var(--accent2)">Gegenwart / allg.</span></td><td class="bsp">Es regnet.</td></tr>
+      <tr><td class="zf">Futur I</td><td><span style="color:var(--red)">Zukunft</span></td><td class="bsp">Es wird regnen.</td></tr>
+    </table>
+    <div class="rule-box yellow" style="margin-top:10px">
+      ⚠️ Das <strong>Präsens</strong> kann auch allgemein gültige Aussagen ausdrücken (alle Zeitstufen): <em>„Menschen leiden unter großer Hitze."</em>
+    </div>
+    <div class="rule-box blue">
+      💡 <strong>Zeitangaben helfen:</strong> „gestern" = Vergangenheit · „heute/gerade" = Gegenwart · „morgen/bald" = Zukunft
+    </div>
+  </div>
+
+  <!-- FACHBEGRIFFE KLIMAWANDEL -->
+  <div class="collapsible-header" onclick="toggleBlock(this)">
+    <span class="collapsible-title">🌍 Fachbegriffe: Klimawandel & Meere</span>
+    <span class="collapsible-arrow">▼</span>
+  </div>
+  <div class="collapsible-body">
+    <table class="vocab-table">
+      <tr><th>Begriff</th><th>Erklärung</th></tr>
+      <tr><td class="term">Klimawandel</td><td>Gegenwärtige Änderung des Klimas durch den Menschen</td></tr>
+      <tr><td class="term">Treibhauseffekt</td><td>Erwärmung der Erde durch Treibhausgase in der Atmosphäre</td></tr>
+      <tr><td class="term">Atmosphäre</td><td>Lufthülle der Erde, enthält Treibhausgase</td></tr>
+      <tr><td class="term">Kohlendioxid (CO₂)</td><td>Bekanntestes Treibhausgas, entsteht bei Verbrennung</td></tr>
+      <tr><td class="term">Treibhausgase</td><td>Gase, die Wärme in der Atmosphäre halten</td></tr>
+      <tr><td class="term">Industrielle Revolution</td><td>Veränderung der Wirtschaft ab 1800, Massenproduktion</td></tr>
+      <tr><td class="term">Meeresspiegel</td><td>Höhe der Meeresoberfläche, steigt durch Gletscherschmelze</td></tr>
+      <tr><td class="term">Schlüsselwörter</td><td>Wichtigste Wörter eines Textes, drücken Kernaussagen aus</td></tr>
+      <tr><td class="term">Sachtext</td><td>Textsore, die über Tatsachen und Geschehnisse informiert</td></tr>
+      <tr><td class="term">Sinnabschnitt</td><td>Textabschnitt mit einem Hauptthema (= Absatz)</td></tr>
+      <tr><td class="term">Mikroplastik</td><td>Winzige Kunststoffteilchen, z.B. in Kosmetik und Kleidung</td></tr>
+      <tr><td class="term">Geisternetze</td><td>Im Meer verlorene Fischernetze, gefährlich für Meerestiere</td></tr>
+      <tr><td class="term">Kopffüßer</td><td>Tierklasse der Tintenfische (Kraken, Sepien, Kalmare)</td></tr>
+      <tr><td class="term">Nordkaper</td><td>Seltenster Großwal der Welt</td></tr>
+    </table>
+  </div>
+
+  <!-- OBER- UND UNTERBEGRIFFE -->
+  <div class="collapsible-header" onclick="toggleBlock(this)">
+    <span class="collapsible-title">🗂️ Ober- und Unterbegriffe</span>
+    <span class="collapsible-arrow">▼</span>
+  </div>
+  <div class="collapsible-body">
+    <div class="rule-box">
+      <strong>Oberbegriff</strong> = übergeordneter Begriff · <strong>Unterbegriff</strong> = speziellerer Begriff
+    </div>
+    <div class="rule-box blue">
+      Beispiel: <strong style="color:var(--accent)">Gas</strong> (Oberbegriff)<br>
+      → Erdgas, Treibhausgas (Unterbegriffe)<br>
+      → Wasserdampf, Kohlendioxid (Unterbegriffe von Treibhausgas)
+    </div>
+    <div class="rule-box yellow">
+      Weitere Beispiele aus dem Buch:<br>
+      <strong>Naturkatastrophen</strong> → Erdbeben, Tornado, Überflutung, Dürre<br>
+      <strong>Niederschläge</strong> → Regen, Schnee, Tau, Hagel<br>
+      <strong>Brennstoffe</strong> → Kohle, Erdgas, Erdöl, Holz
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════ LÜCKENTEXT ══════════════════════════════ -->
+<div class="section" id="sec-lueckentext">
+  <div class="card">
+    <div class="select-row">
+      <button class="sel-btn active" id="sel-ab" onclick="selectGapTopic('ab',this)">📍 Adverbialbestimmungen</button>
+      <button class="sel-btn" id="sel-zeit" onclick="selectGapTopic('zeit',this)">⏳ Zeitformen</button>
+      <button class="sel-btn" id="sel-klima" onclick="selectGapTopic('klima',this)">🌍 Klimawandel</button>
+    </div>
+
+    <div class="test-progress-bar"><div class="test-progress-fill" id="gap-pbar"></div></div>
+    <div class="test-counter" id="gap-counter">Satz 1 von 12</div>
+
+    <div id="gap-single">
+      <div class="mod-badge badge-ab" id="gap-badge">Adverbialbestimmungen</div>
+      <p class="hint-note" id="gap-instruction">Trage das richtige Wort in die Lücke ein.</p>
+      <div class="test-question" id="gap-display"></div>
+      <input class="gap-input" id="gap-answer" type="text"
+             autocomplete="off" autocorrect="off" spellcheck="false"
+             style="margin-bottom:14px" placeholder="Antwort"
+             onkeydown="if(event.key==='Enter') checkSingleGap()">
+      <div class="test-feedback" id="gap-fb"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" id="gap-check-btn" onclick="checkSingleGap()">Prüfen ✓</button>
+        <button class="btn btn-primary" id="gap-next-btn" onclick="nextSingleGap()" style="display:none">Weiter →</button>
+      </div>
+    </div>
+
+    <div id="gap-result" style="display:none;text-align:center;padding:10px 0">
+      <div style="font-size:2rem;margin-bottom:8px" id="gap-res-emoji">🎉</div>
+      <div style="font-family:'Baloo 2',sans-serif;font-size:1.2rem;font-weight:800;color:var(--accent);margin-bottom:6px">Fertig!</div>
+      <div style="font-size:1.6rem;font-weight:900;color:var(--accent);margin-bottom:16px" id="gap-res-score"></div>
+      <button class="btn btn-primary" onclick="startGaps()">Nochmal 🔄</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ KARTEIKARTEN ══════════════════════════════ -->
+<div class="section" id="sec-karteikarten">
+  <div class="card">
+    <div class="select-row">
+      <button class="sel-btn active" id="fsel-fach" onclick="selectFlashTopic('fach',this)">🌍 Fachbegriffe</button>
+      <button class="sel-btn" id="fsel-ab" onclick="selectFlashTopic('ab',this)">📍 Adverbialb.</button>
+      <button class="sel-btn" id="fsel-zeit" onclick="selectFlashTopic('zeit',this)">⏳ Zeitformen</button>
+    </div>
+    <div class="fc-nav">
+      <button class="btn btn-secondary" style="padding:7px 14px;font-size:.8rem" onclick="fcPrev()">← Zurück</button>
+      <span class="fc-counter" id="fc-counter">1 / 14</span>
+      <button class="btn btn-primary" style="padding:7px 14px;font-size:.8rem" onclick="fcNext()">Weiter →</button>
+    </div>
+    <div class="fc-progress" id="fc-dots"></div>
+    <div class="flashcard-container">
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div class="fc-front">
+          <div class="fc-label" id="fc-front-label">Begriff</div>
+          <div class="fc-word" id="fc-front-word">Klimawandel</div>
+          <div class="fc-tap">👆 tippen zum Umdrehen</div>
+        </div>
+        <div class="fc-back">
+          <div class="fc-label" id="fc-back-label">Erklärung</div>
+          <div class="fc-word" id="fc-back-word">Gegenwärtige Änderung des Klimas durch den Menschen</div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:14px">
+      <button class="btn btn-secondary" style="font-size:.85rem" onclick="markCard(false)">❌ Noch üben</button>
+      <button class="btn btn-primary" style="font-size:.85rem" onclick="markCard(true)">✅ Kann ich!</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ TEST ══════════════════════════════ -->
+<div class="section" id="sec-test">
+  <div id="test-start">
+    <div class="card" style="text-align:center">
+      <div style="font-size:2rem;margin-bottom:10px">🎯</div>
+      <div style="font-family:'Baloo 2',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:8px">Test starten</div>
+      <div style="color:var(--muted);font-size:.88rem;margin-bottom:16px">Schlüsselwörter + Textverständnis<br>Erst am Schluss siehst du das Ergebnis!</div>
+      <div class="select-row" style="justify-content:center;margin-bottom:16px">
+        <button class="sel-btn active" id="tsel-all" onclick="selectTestTopic('all',this)">Alles</button>
+        <button class="sel-btn" id="tsel-klima" onclick="selectTestTopic('klima',this)">🌍 Klimawandel</button>
+        <button class="sel-btn" id="tsel-meere" onclick="selectTestTopic('meere',this)">🌊 Meere</button>
+        <button class="sel-btn" id="tsel-gram" onclick="selectTestTopic('gram',this)">📝 Grammatik</button>
+      </div>
+      <button class="btn btn-primary" onclick="startTest()">Test starten 🚀</button>
+    </div>
+  </div>
+
+  <div id="test-running" style="display:none">
+    <div class="test-progress-bar"><div class="test-progress-fill" id="test-pbar"></div></div>
+    <div class="test-counter" id="test-counter">Frage 1 von 20</div>
+    <div class="card" id="test-card">
+      <!-- Lesetext (optional) -->
+      <div id="test-lesetext" style="display:none"></div>
+      <!-- Schlüsselwörter-Modus -->
+      <div id="test-chips-area" style="display:none">
+        <div class="hint-note" id="test-chips-hint"></div>
+        <div class="chips-grid" id="test-chips"></div>
+      </div>
+      <!-- MC-Modus -->
+      <div id="test-mc-area">
+        <div class="test-question" id="test-q"></div>
+        <div class="test-options" id="test-opts"></div>
+      </div>
+      <div class="test-feedback" id="test-fb"></div>
+      <button class="btn btn-primary" id="test-next" onclick="testNext()" style="display:none">Weiter →</button>
+    </div>
+  </div>
+
+  <div id="test-result" style="display:none">
+    <div class="card result-screen">
+      <div class="result-emoji" id="res-emoji"></div>
+      <div class="result-title">Test abgeschlossen!</div>
+      <div class="result-score" id="res-score"></div>
+      <div class="result-breakdown" id="res-breakdown"></div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="startTest()">Nochmal 🔄</button>
+        <button class="btn btn-secondary" onclick="showTab('zusammenfassung',null)">Zusammenfassung 📖</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ LESE-TRAINING ══════════════════════════════ -->
+<div class="section" id="sec-lesetraining">
+
+  <div class="card" id="lt-start-card">
+    <div style="text-align:center;padding:10px 0">
+      <div style="font-size:2rem;margin-bottom:10px">📚</div>
+      <div style="font-family:'Baloo 2',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:8px">Lese-Training</div>
+      <div style="color:var(--muted);font-size:.88rem;margin-bottom:16px">
+        Lies den Text aufmerksam durch.<br>Dann beantworte die Fragen dazu.
+      </div>
+      <div class="select-row" style="justify-content:center;margin-bottom:16px">
+        <button class="sel-btn active" id="ltsel-0" onclick="selectText(0,this)">🌍 Klimawandel</button>
+        <button class="sel-btn" id="ltsel-1" onclick="selectText(1,this)">🐧 Pinguine</button>
+        <button class="sel-btn" id="ltsel-2" onclick="selectText(2,this)">🐙 Tintenfische</button>
+        <button class="sel-btn" id="ltsel-3" onclick="selectText(3,this)">🐋 Nordkaper</button>
+      </div>
+      <button class="btn btn-primary" onclick="startLesetraining()">Text lesen & Fragen beantworten 📖</button>
+    </div>
+  </div>
+
+  <!-- LESETEXT -->
+  <div id="lt-reading" style="display:none">
+    <div class="card">
+      <div class="lesetext" id="lt-text"></div>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:8px">
+        <button class="btn btn-primary" onclick="startQuestions()">Fragen beantworten →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRAGEN -->
+  <div id="lt-questions" style="display:none">
+    <div class="card">
+      <div class="test-progress-bar"><div class="test-progress-fill" id="lt-pbar"></div></div>
+      <div class="test-counter" id="lt-counter">Frage 1 von 5</div>
+
+      <!-- Text zum Nachschlagen -->
+      <div id="lt-text-ref" style="margin-bottom:14px">
+        <button class="btn btn-secondary" style="font-size:.8rem;padding:6px 14px;width:100%" onclick="toggleText()">
+          📖 Text nochmal lesen ▼
+        </button>
+        <div id="lt-text-collapse" style="display:none;margin-top:8px">
+          <div class="lesetext" id="lt-text-small" style="font-size:.85rem"></div>
+        </div>
+      </div>
+
+      <div class="test-question" id="lt-q"></div>
+
+      <!-- MC Optionen -->
+      <div id="lt-mc-area">
+        <div class="test-options" id="lt-opts"></div>
+      </div>
+
+      <!-- Offene Frage -->
+      <div id="lt-open-area" style="display:none">
+        <textarea id="lt-open-answer"
+          style="width:100%;background:var(--card2);border:2px solid var(--border);border-radius:10px;
+                 color:var(--text);font-family:'Nunito',sans-serif;font-size:.95rem;padding:12px;
+                 min-height:80px;outline:none;resize:vertical;margin-bottom:12px"
+          placeholder="Schreibe deine Antwort hier..."></textarea>
+        <button class="btn btn-primary" onclick="showMusterantwort()">Musterantwort anzeigen →</button>
+      </div>
+
+      <!-- Schlüsselwörter wählen -->
+      <div id="lt-chips-area" style="display:none">
+        <div class="hint-note" id="lt-chips-hint"></div>
+        <div class="chips-grid" id="lt-chips"></div>
+      </div>
+
+      <div class="test-feedback" id="lt-fb"></div>
+      <button class="btn btn-primary" id="lt-next" onclick="ltNext()" style="display:none">Weiter →</button>
+    </div>
+  </div>
+
+  <!-- ERGEBNIS -->
+  <div id="lt-result" style="display:none">
+    <div class="card result-screen">
+      <div class="result-emoji" id="lt-res-emoji"></div>
+      <div class="result-title">Lese-Training abgeschlossen!</div>
+      <div class="result-score" id="lt-res-score"></div>
+      <div style="background:var(--card2);border-radius:12px;padding:14px;margin-bottom:16px;text-align:left;font-size:.88rem;color:var(--muted)" id="lt-res-detail"></div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="startLesetraining()">Nochmal 🔄</button>
+        <button class="btn btn-secondary" onclick="backToLTStart()">Anderen Text wählen 📚</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</div><!-- /content -->
+
+<script>
+// ═══════════════════════════════════════════
+// DATA – LÜCKENTEXT
+// ═══════════════════════════════════════════
+const GAP_AB = [
+  {s:"___ werden durch Unwetter Ernten zerstört.", a:"Weltweit", stammwort:"Wo? → Ort", hint:"'Weltweit' = Adverbialbestimmung des Ortes (Wo?)"},
+  {s:"___ steigen die Temperaturen auf der Erde.", a:"Seit Jahrzehnten", stammwort:"Seit wann? → Zeit", hint:"'Seit Jahrzehnten' = Adverbialbestimmung der Zeit"},
+  {s:"Die Gletscher schmelzen ___.", a:"erschreckend schnell", stammwort:"Wie? → Art und Weise", hint:"'erschreckend schnell' = Adverbialbestimmung der Art und Weise"},
+  {s:"___ werden immer mehr Treibhausgase produziert.", a:"Durch die Industrie", stammwort:"Wodurch? → Grund", hint:"'Durch die Industrie' = Adverbialbestimmung des Grundes"},
+  {s:"Die Pinguine wandern ___ ins Innere der Antarktis.", a:"zum Brüten", stammwort:"Wozu? → Grund", hint:"'zum Brüten' = Adverbialbestimmung des Grundes"},
+  {s:"___ gibt es in den Alpen noch Gletscher.", a:"Heute", stammwort:"Wann? → Zeit", hint:"'Heute' = Adverbialbestimmung der Zeit"},
+  {s:"Das Plastik verteilt sich ___ in den Ozeanen.", a:"durch Strömungen", stammwort:"Wodurch? → Grund/Art", hint:"'durch Strömungen' = Adverbialbestimmung"},
+  {s:"Die Tintenfische leben ___.", a:"im Meer", stammwort:"Wo? → Ort", hint:"'im Meer' = Adverbialbestimmung des Ortes"},
+  {s:"___ kommen immer mehr Tintenfische in den Weltmeeren vor.", a:"Seit 60 Jahren", stammwort:"Seit wann? → Zeit", hint:"'Seit 60 Jahren' = Adverbialbestimmung der Zeit"},
+  {s:"Der Klimawandel verändert sich ___ schnell.", a:"wegen des Menschen", stammwort:"Warum? → Grund", hint:"'wegen des Menschen' = Adverbialbestimmung des Grundes"},
+];
+
+const GAP_ZEIT = [
+  {s:"Die Temperaturen ___ seit Jahrzehnten an. (Präsens)", a:"steigen", stammwort:"steigen (Präsens)", hint:"Präsens: sie steigen"},
+  {s:"Vor 150 Jahren ___ rauchende Fabriksschlote ein Zeichen für Erfolg. (Präteritum)", a:"waren", stammwort:"sein (Präteritum)", hint:"Präteritum: sie waren"},
+  {s:"In den letzten Jahren ___ sich das Klima stark verändert. (Perfekt)", a:"hat", stammwort:"haben (Perfekt)", hint:"Perfekt: es hat sich verändert"},
+  {s:"Die Temperaturen ___ bis 2100 um 5 Grad steigen. (Futur I)", a:"werden", stammwort:"werden (Futur I)", hint:"Futur I: werden + Infinitiv"},
+  {s:"Der Gletscher ___ sich langsam talabwärts. (Präsens)", a:"bewegt", stammwort:"sich bewegen (Präsens)", hint:"Präsens: er bewegt sich"},
+  {s:"Die Pasterze ___ seit 1856 mehr als die Hälfte ihrer Fläche verloren. (Perfekt)", a:"hat", stammwort:"haben (Perfekt)", hint:"Perfekt: sie hat verloren"},
+  {s:"Früher ___ man das Verbrennen von Holz nicht für schädlich. (Präteritum)", a:"hielt", stammwort:"halten (Präteritum)", hint:"Präteritum: man hielt"},
+  {s:"Bald ___ viele Tierarten ihren Lebensraum verlieren. (Futur I)", a:"werden", stammwort:"werden (Futur I)", hint:"Futur I: werden + Infinitiv"},
+];
+
+const GAP_KLIMA = [
+  {s:"Der Treibhauseffekt sorgt dafür, dass es auf der Erde ___ warm ist.", a:"angenehm", stammwort:"angenehm (Adjektiv)", hint:"Der natürliche Treibhauseffekt hält die Erde angenehm warm"},
+  {s:"Das bekannteste Treibhausgas ist ___, abgekürzt CO₂.", a:"Kohlendioxid", stammwort:"Kohlendioxid (Fachbegriff)", hint:"CO₂ = Kohlendioxid"},
+  {s:"Durch das Schmelzwasser steigt der ___ an.", a:"Meeresspiegel", stammwort:"Meeresspiegel (Fachbegriff)", hint:"Schmelzwasser → Meeresspiegel steigt"},
+  {s:"Die Ursache für den rasanten Klimawandel ist der ___.", a:"Mensch", stammwort:"Mensch", hint:"Der Mensch ist die Ursache des heutigen Klimawandels"},
+  {s:"Plastik gelangt über ___ in die Meere.", a:"Flüsse", stammwort:"Flüsse", hint:"Flüsse transportieren Plastik ins Meer"},
+  {s:"Tintenfische zählen zur Klasse der ___.", a:"Kopffüßer", stammwort:"Kopffüßer (Fachbegriff)", hint:"Tintenfische = Kopffüßer"},
+  {s:"Geisternetze sind verlorene ___, die im Meer treiben.", a:"Fischernetze", stammwort:"Fischernetze", hint:"Geisternetze = im Meer verloren gegangene Fischernetze"},
+  {s:"Der ___ ist der seltenste Großwal der Welt.", a:"Nordkaper", stammwort:"Nordkaper (Fachbegriff)", hint:"Nordkaper = seltenster Großwal"},
+];
+
+// ═══════════════════════════════════════════
+// DATA – KARTEIKARTEN
+// ═══════════════════════════════════════════
+const FC_FACH = [
+  {front:"Klimawandel", back:"Gegenwärtige Änderung des Klimas, verursacht durch den Menschen"},
+  {front:"Treibhauseffekt", back:"Erwärmung der Erde durch Treibhausgase in der Atmosphäre"},
+  {front:"Atmosphäre", back:"Lufthülle der Erde; enthält Treibhausgase"},
+  {front:"CO₂ / Kohlendioxid", back:"Bekanntestes Treibhausgas; entsteht bei Verbrennung von Kohle, Öl, Gas"},
+  {front:"Industrielle Revolution", back:"Veränderung der Wirtschaft ab 1800 durch Massenproduktion in Fabriken"},
+  {front:"Meeresspiegel", back:"Steigt durch Schmelzen der Gletscher und des Polareises"},
+  {front:"Mikroplastik", back:"Winzige Kunststoffteilchen in Kosmetik, Kleidungsfasern; gelangen ins Meer"},
+  {front:"Geisternetze", back:"Im Meer verlorene Fischernetze; lebensgefährlich für Meeressäuger"},
+  {front:"Kopffüßer", back:"Tierklasse der Tintenfische: Kraken, Sepien, Kalmare"},
+  {front:"Nordkaper", back:"Seltenster Großwal der Welt; bedroht durch Fischernetze"},
+  {front:"Schlüsselwörter", back:"Wichtigste Wörter eines Textes; drücken Thema und Kernaussagen aus"},
+  {front:"Sinnabschnitt", back:"Textabschnitt mit einem Hauptgedanken (= Absatz)"},
+  {front:"Sachtext", back:"Textsorte, die sachlich über Tatsachen und Geschehnisse informiert"},
+  {front:"Treibhausgase", back:"Gase in der Atmosphäre (z.B. CO₂), die Wärme halten"},
+];
+
+const FC_AB = [
+  {front:"Adverbialbestimmung des ORTES", back:"Fragewort: Wo? Wohin? Woher?\nBeispiel: in den Wäldern · an der Küste"},
+  {front:"Adverbialbestimmung der ZEIT", back:"Fragewort: Wann? Seit wann? Wie lange?\nBeispiel: seit Jahrzehnten · im Winter"},
+  {front:"Adverbialbestimmung der ART & WEISE", back:"Fragewort: Wie? Womit? Auf welche Art?\nBeispiel: erschreckend schnell · durch Strömungen"},
+  {front:"Adverbialbestimmung des GRUNDES", back:"Fragewort: Warum? Weshalb? Weswegen?\nBeispiel: wegen der Erderwärmung · durch Unwetter"},
+  {front:"'Weltweit werden Ernten zerstört.'\nWelche AB ist das?", back:"Adverbialbestimmung des ORTES\n(Wo? → Weltweit)"},
+  {front:"'Seit 60 Jahren gibt es mehr Tintenfische.'\nWelche AB ist das?", back:"Adverbialbestimmung der ZEIT\n(Seit wann? → Seit 60 Jahren)"},
+  {front:"'Durch Unwetter werden Ernten zerstört.'\nWelche AB ist das?", back:"Adverbialbestimmung des GRUNDES\n(Warum? → Durch Unwetter)"},
+];
+
+const FC_ZEIT = [
+  {front:"Präteritum\n(Zeitform)", back:"Zeitstufe: VERGANGENHEIT\nBildung: Stammveränderung\nBeispiel: Es regnete stark."},
+  {front:"Perfekt\n(Zeitform)", back:"Zeitstufe: VERGANGENHEIT\nBildung: haben/sein + Partizip II\nBeispiel: Es hat geregnet."},
+  {front:"Präsens\n(Zeitform)", back:"Zeitstufe: GEGENWART (auch allgemeingültig)\nBeispiel: Es regnet."},
+  {front:"Futur I\n(Zeitform)", back:"Zeitstufe: ZUKUNFT\nBildung: werden + Infinitiv\nBeispiel: Es wird regnen."},
+  {front:"'Die Temperaturen stiegen an.'\nWelche Zeitform?", back:"PRÄTERITUM\n(Zeitstufe: Vergangenheit)"},
+  {front:"'Die Temperaturen werden steigen.'\nWelche Zeitform?", back:"FUTUR I\n(Zeitstufe: Zukunft)"},
+  {front:"'Die Temperaturen sind gestiegen.'\nWelche Zeitform?", back:"PERFEKT\n(Zeitstufe: Vergangenheit)"},
+];
+
+// ═══════════════════════════════════════════
+// DATA – TEST
+// ═══════════════════════════════════════════
+const TEST_ALL = [
+  // SCHLÜSSELWÖRTER (chips)
+  { type:'chips', cat:'Klimawandel',
+    text:'Klimawandel nennt man die gegenwärtige Änderung des Klimas. Im Gegensatz zum Wetter bedeutet Klima, wie warm oder kalt es an einem Ort über längere Zeit ist. Normalerweise verändert sich das Klima sehr langsam.',
+    q:'Welche 3 Wörter sind die wichtigsten Schlüsselwörter?',
+    chips:['Klimawandel','Klima','Änderung','warm','kalt','Wetter','langsam','Ort'],
+    correct:['Klimawandel','Klima','Änderung'], n:3 },
+  { type:'chips', cat:'Klimawandel',
+    text:'Das Eis in der Arktis und Antarktis schmilzt. Durch das viele Schmelzwasser steigt der Meeresspiegel an. Land an der Küste wird überschwemmt. Ganze Inseln drohen unterzugehen.',
+    q:'Welche 4 Wörter sind die wichtigsten Schlüsselwörter?',
+    chips:['Eis','Arktis','Schmelzwasser','Meeresspiegel','Küste','Inseln','Land','Antarktis'],
+    correct:['Eis','Schmelzwasser','Meeresspiegel','Inseln'], n:4 },
+  { type:'chips', cat:'Meere',
+    text:'Die Tintenfische sind Weichtiere, die im Meer leben. Sie zählen zur Klasse der Kopffüßer. Bei Gefahr können sie Tinte ausstoßen. Der angreifende Räuber soll die Tintenwolke mit dem Beutetier verwechseln.',
+    q:'Welche 3 Wörter sind die wichtigsten?',
+    chips:['Tintenfisch','Kopffüßer','Tintenbeutel','Weichtier','Tinte','Räuber','Gefahr','Meer'],
+    correct:['Tintenfisch','Kopffüßer','Tinte'], n:3 },
+
+  // TEXTVERSTÄNDNIS (mc)
+  { type:'mc', cat:'Klimawandel',
+    text:'Der Treibhauseffekt sorgt dafür, dass es auf der Erde angenehm warm ist. Die Atmosphäre besteht aus vielen Gasen. Einige davon sind Treibhausgase. Das bekannteste davon ist Kohlendioxid (CO₂). Diese Gase lassen das Sonnenlicht herein, aber die Wärme nur zum Teil wieder hinaus.',
+    q:'Was ist das bekannteste Treibhausgas?',
+    opts:['Sauerstoff (O₂)','Stickstoff (N₂)','Kohlendioxid (CO₂)','Wasserstoff (H₂)'], a:2,
+    e:'Kohlendioxid (CO₂) ist das bekannteste Treibhausgas.' },
+  { type:'mc', cat:'Klimawandel',
+    text:'Die Ursache für den rasanten Klimawandel ist der Mensch. Seit der Industriellen Revolution verbrennen Menschen viel Holz und Kohle. Außerdem wurden sehr viele Wälder abgeholzt – Bäume könnten das CO₂ aus der Luft filtern.',
+    q:'Was ist KEINE Ursache des Klimawandels laut diesem Text?',
+    opts:['Verbrennen von Holz und Kohle','Abholzung von Wäldern','Zu viel Regen','Industrielle Revolution'], a:2,
+    e:'Zu viel Regen wird im Text nicht als Ursache genannt.' },
+  { type:'mc', cat:'Klimawandel',
+    text:'Adverbialbestimmungen machen Sätze genauer. Es gibt vier Arten: des Ortes (Wo?), der Zeit (Wann?), der Art und Weise (Wie?) und des Grundes (Warum?).',
+    q:'Mit welchem Fragewort findet man eine Adverbialbestimmung des Grundes?',
+    opts:['Wo?','Wie?','Wann?','Warum?'], a:3,
+    e:'Grund → Warum? / Weshalb? / Weswegen?' },
+  { type:'mc', cat:'Grammatik',
+    text:'"In den letzten Jahrzehnten gab es deutliche Veränderungen." – Das Verb "gab" steht im Präteritum. Das Präteritum beschreibt die Vergangenheit.',
+    q:'In welcher Zeitform steht: "Die Temperaturen sind gestiegen"?',
+    opts:['Präsens','Präteritum','Perfekt','Futur I'], a:2,
+    e:'Perfekt: haben/sein + Partizip II → sind gestiegen' },
+  { type:'mc', cat:'Meere',
+    text:'Plastik im Meer ist ein ernstzunehmendes Problem. Größere Plastikteile sind eine Gefahr für Fische und Meeressäuger. Kleinere Teile werden von Meereslebewesen mit der Nahrung aufgenommen. Schätzungen zufolge stammt etwa 80 Prozent des Mülls vom Land.',
+    q:'Woher stammt laut Text der größte Teil des Mülls in den Meeren?',
+    opts:['Von Schiffen','Vom Land (80%)','Aus Flüssen','Von Bohrplattformen'], a:1,
+    e:'80 Prozent des Mülls in den Meeren stammt vom Land.' },
+  { type:'mc', cat:'Meere',
+    text:'Am bekanntesten ist der Krake. Er wird wegen seiner acht Arme auch Oktopus genannt. Das ist lateinische Sprache und heißt „Achtfüßer". Kraken können sich sogar einige Zeit außerhalb des Wassers aufhalten.',
+    q:'Warum heißt der Krake auch „Oktopus"?',
+    opts:['Weil er im Ozean lebt.','Weil er acht Arme hat – auf Lateinisch „Achtfüßer".','Weil er schwarz ist.','Weil er sehr groß ist.'], a:1,
+    e:'Oktopus = Lateinisch für Achtfüßer → wegen der acht Arme.' },
+  { type:'mc', cat:'Grammatik',
+    text:'Schlüsselwörter drücken die wichtigsten Inhalte eines Textes aus. Sie weisen auf das Thema hin und bezeichnen wichtige Informationen (Kernaussagen). Sie sind nützlich für eine Zusammenfassung.',
+    q:'Was sind KEINE Schlüsselwörter?',
+    opts:['Fachbegriffe','Kernaussagen','Füllwörter wie "und", "auch"','Thema des Textes'], a:2,
+    e:'Füllwörter sind keine Schlüsselwörter – sie tragen keine wichtige Bedeutung.' },
+  { type:'mc', cat:'Klimawandel',
+    text:'Wir können die drei Zeitstufen mit Adverbialbestimmungen genauer ausdrücken: Vergangenes: vor langer Zeit, gestern, vor 4 Jahren. Gegenwärtiges: jetzt, gerade eben, zurzeit. Zukünftiges: in naher Zukunft, bald, morgen.',
+    q:'Welche Adverbialbestimmung gehört zur Zeitstufe ZUKUNFT?',
+    opts:['gestern','zurzeit','vor langer Zeit','in naher Zukunft'], a:3,
+    e:'"In naher Zukunft" weist auf die Zeitstufe Zukunft hin.' },
+  { type:'mc', cat:'Meere',
+    text:'Nordkaper, die seltensten Großwale der Welt, schwimmen am liebsten dort, wo die Fischer ihre Stellnetze auslegen. In dem Labyrinth aus Seilen und Netzen verheddern sich die Tiere und geraten in Lebensgefahr.',
+    q:'Warum sind Nordkaper besonders gefährdet?',
+    opts:['Wegen der Wasserverschmutzung durch Öl.','Weil sie sich in Fischernetzen verheddern.','Weil sie zu langsam schwimmen.','Weil es zu wenig Nahrung gibt.'], a:1,
+    e:'Nordkaper verheddern sich in Stellnetzen und Hummerfallen der Fischer.' },
+  { type:'mc', cat:'Grammatik',
+    text:'Gas ist der Oberbegriff. Erdgas und Treibhausgas sind Unterbegriffe dazu. Wasserdampf und Kohlendioxid sind wiederum Unterbegriffe zum Begriff Treibhausgas.',
+    q:'Was ist der Oberbegriff für Kohle, Erdgas, Erdöl und Holz?',
+    opts:['Treibhausgase','Niederschläge','Brennstoffe','Naturkatastrophen'], a:2,
+    e:'Kohle, Erdgas, Erdöl und Holz sind Unterbegriffe von Brennstoffe.' },
+  { type:'chips', cat:'Meere',
+    text:'Nordkaper, die seltensten Großwale der Welt, schwimmen am liebsten dort, wo die Fischer ihre Stellnetze auslegen. In dem Labyrinth aus Seilen und Netzen verheddern sich die Tiere und geraten in Lebensgefahr.',
+    q:'Welche 3 Wörter sind die wichtigsten?',
+    chips:['Nordkaper','Großwal','Stellnetze','Lebensgefahr','Fischer','Seile','Labyrinth','selten'],
+    correct:['Nordkaper','Stellnetze','Lebensgefahr'], n:3 },
+];
+
+// ═══════════════════════════════════════════
+// TABS & COLLAPSIBLE
+// ═══════════════════════════════════════════
+function showTab(name, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sec-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  else { const tabs={zusammenfassung:0,lueckentext:1,karteikarten:2,test:3,lesetraining:4}; document.querySelectorAll('.tab')[tabs[name]]?.classList.add('active'); }
+}
+function toggleBlock(header) {
+  const body = header.nextElementSibling;
+  const isOpen = header.classList.contains('open');
+  header.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+
+// ═══════════════════════════════════════════
+// LÜCKENTEXT
+// ═══════════════════════════════════════════
+let gapTopic='ab', gapQueue=[], gapIdx=0, gapCorrect=0;
+
+function selectGapTopic(t,btn){
+  gapTopic=t;
+  document.querySelectorAll('.sel-btn[id^="sel-"]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  startGaps();
+}
+function startGaps(){
+  const data=gapTopic==='ab'?GAP_AB:gapTopic==='zeit'?GAP_ZEIT:GAP_KLIMA;
+  gapQueue=shuffle([...data]); gapIdx=0; gapCorrect=0;
+  document.getElementById('gap-result').style.display='none';
+  document.getElementById('gap-single').style.display='block';
+  const badges={ab:['Adverbialbestimmungen','badge-ab'],zeit:['Zeitformen','badge-zeit'],klima:['Klimawandel & Meere','badge-schluessel']};
+  const [label,cls]=badges[gapTopic];
+  document.getElementById('gap-badge').textContent=label;
+  document.getElementById('gap-badge').className='mod-badge '+cls;
+  showGapQuestion();
+}
+function showGapQuestion(){
+  const item=gapQueue[gapIdx];
+  const total=gapQueue.length;
+  document.getElementById('gap-pbar').style.width=(gapIdx/total*100)+'%';
+  document.getElementById('gap-counter').textContent=`Satz ${gapIdx+1} von ${total}`;
+  const sentence=item.s.replace('___','<span style="color:var(--accent);font-weight:800">___</span>');
+  document.getElementById('gap-display').innerHTML=
+    `<div style="font-size:.82rem;color:var(--muted);margin-bottom:8px">📌 Tipp: <strong style="color:var(--accent2)">${item.stammwort}</strong></div>${sentence}`;
+  const inp=document.getElementById('gap-answer');
+  inp.value=''; inp.disabled=false; inp.className='gap-input';
+  inp.style.width=item.a.length>10?'220px':'160px';
+  document.getElementById('gap-fb').className='test-feedback';
+  document.getElementById('gap-check-btn').style.display='inline-block';
+  document.getElementById('gap-next-btn').style.display='none';
+  setTimeout(()=>inp.focus(),100);
+}
+function checkSingleGap(){
+  const item=gapQueue[gapIdx];
+  const inp=document.getElementById('gap-answer');
+  const val=inp.value.trim().toLowerCase();
+  const correct=val===item.a.toLowerCase();
+  inp.disabled=true;
+  inp.className='gap-input '+(correct?'correct':'wrong');
+  const fb=document.getElementById('gap-fb');
+  if(correct){gapCorrect++;fb.className='test-feedback show good';fb.textContent='✅ Richtig!';}
+  else{fb.className='test-feedback show bad';fb.innerHTML=`❌ Richtig wäre: <strong style="color:var(--accent)">${item.a}</strong> · ${item.hint}`;}
+  document.getElementById('gap-check-btn').style.display='none';
+  document.getElementById('gap-next-btn').style.display='inline-block';
+}
+function nextSingleGap(){
+  gapIdx++;
+  if(gapIdx>=gapQueue.length)showGapResult();else showGapQuestion();
+}
+function showGapResult(){
+  document.getElementById('gap-single').style.display='none';
+  document.getElementById('gap-result').style.display='block';
+  const pct=Math.round(gapCorrect/gapQueue.length*100);
+  document.getElementById('gap-res-emoji').textContent=pct>=85?'🏆':pct>=65?'⭐':'💪';
+  document.getElementById('gap-res-score').textContent=`${gapCorrect} / ${gapQueue.length} richtig (${pct}%)`;
+  document.getElementById('gap-pbar').style.width='100%';
+  document.getElementById('gap-counter').textContent='Fertig!';
+}
+
+// ═══════════════════════════════════════════
+// KARTEIKARTEN
+// ═══════════════════════════════════════════
+let fcTopic='fach', fcCards=[], fcIdx=0, fcKnown=new Set(), fcSeen=new Set();
+
+function selectFlashTopic(t,btn){
+  fcTopic=t;
+  document.querySelectorAll('.sel-btn[id^="fsel-"]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  loadFlashCards();
+}
+function loadFlashCards(){
+  if(fcTopic==='fach')fcCards=FC_FACH;
+  else if(fcTopic==='ab')fcCards=FC_AB;
+  else fcCards=FC_ZEIT;
+  fcIdx=0; fcKnown=new Set(); fcSeen=new Set();
+  document.getElementById('flashcard').classList.remove('flipped');
+  const labels={fach:['Begriff','Erklärung'],ab:['Adverbialbestimmung','Fragewort + Beispiel'],zeit:['Zeitform','Zeitstufe + Beispiel']};
+  const [fl,bl]=labels[fcTopic];
+  document.getElementById('fc-front-label').textContent=fl;
+  document.getElementById('fc-back-label').textContent=bl;
+  updateFlashCard(); buildDots();
+}
+function updateFlashCard(){
+  const c=fcCards[fcIdx];
+  document.getElementById('fc-front-word').textContent=c.front;
+  document.getElementById('fc-back-word').textContent=c.back;
+  document.getElementById('fc-counter').textContent=`${fcIdx+1} / ${fcCards.length}`;
+  document.getElementById('flashcard').classList.remove('flipped');
+  fcSeen.add(fcIdx); updateDots();
+}
+function flipCard(){document.getElementById('flashcard').classList.toggle('flipped');}
+function fcNext(){if(fcIdx<fcCards.length-1){fcIdx++;updateFlashCard();}}
+function fcPrev(){if(fcIdx>0){fcIdx--;updateFlashCard();}}
+function markCard(k){if(k)fcKnown.add(fcIdx);else fcKnown.delete(fcIdx);updateDots();fcNext();}
+function buildDots(){
+  const c=document.getElementById('fc-dots');c.innerHTML='';
+  fcCards.forEach((_,i)=>{const d=document.createElement('div');d.className='fc-dot';d.id=`dot-${i}`;c.appendChild(d);});
+}
+function updateDots(){
+  fcCards.forEach((_,i)=>{
+    const d=document.getElementById(`dot-${i}`);if(!d)return;
+    if(fcKnown.has(i))d.className='fc-dot known';
+    else if(fcSeen.has(i))d.className='fc-dot seen';
+    else d.className='fc-dot';
+  });
+}
+
+// ═══════════════════════════════════════════
+// TEST
+// ═══════════════════════════════════════════
+let testTopic='all', testQueue=[], testIdx=0, testAnswers=[];
+let selChips=[], chipsAnswered=false;
+
+function selectTestTopic(t,btn){
+  testTopic=t;
+  document.querySelectorAll('.sel-btn[id^="tsel-"]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=~~(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function startTest(){
+  let pool=TEST_ALL;
+  if(testTopic==='klima')pool=TEST_ALL.filter(q=>q.cat==='Klimawandel');
+  else if(testTopic==='meere')pool=TEST_ALL.filter(q=>q.cat==='Meere');
+  else if(testTopic==='gram')pool=TEST_ALL.filter(q=>q.cat==='Grammatik');
+  testQueue=shuffle(pool).slice(0,20);
+  testIdx=0; testAnswers=[];
+  document.getElementById('test-start').style.display='none';
+  document.getElementById('test-result').style.display='none';
+  document.getElementById('test-running').style.display='block';
+  showTestQuestion();
+}
+
+function showTestQuestion(){
+  const q=testQueue[testIdx];
+  document.getElementById('test-pbar').style.width=(testIdx/testQueue.length*100)+'%';
+  document.getElementById('test-counter').textContent=`Frage ${testIdx+1} von ${testQueue.length}`;
+  document.getElementById('test-fb').className='test-feedback';
+  document.getElementById('test-next').style.display='none';
+
+  // Lesetext
+  if(q.text){
+    document.getElementById('test-lesetext').style.display='block';
+    document.getElementById('test-lesetext').innerHTML=`<div class="lesetext"><div class="lesetext-title">📖 Lies den Text:</div>${q.text}</div>`;
+  } else {
+    document.getElementById('test-lesetext').style.display='none';
+  }
+
+  if(q.type==='chips'){
+    document.getElementById('test-chips-area').style.display='block';
+    document.getElementById('test-mc-area').style.display='none';
+    document.getElementById('test-chips-hint').textContent=q.q+` (${q.n} Wörter wählen)`;
+    selChips=[]; chipsAnswered=false;
+    const container=document.getElementById('test-chips');
+    container.innerHTML='';
+    shuffle([...q.chips]).forEach(w=>{
+      const btn=document.createElement('button');
+      btn.className='chip'; btn.textContent=w;
+      btn.onclick=()=>toggleChip(btn,w,q);
+      container.appendChild(btn);
+    });
+  } else {
+    document.getElementById('test-chips-area').style.display='none';
+    document.getElementById('test-mc-area').style.display='block';
+    document.getElementById('test-q').textContent=q.q;
+    const optsEl=document.getElementById('test-opts');
+    optsEl.innerHTML='';
+    q.opts.forEach((opt,i)=>{
+      const btn=document.createElement('button');
+      btn.className='test-opt'; btn.textContent=opt;
+      btn.onclick=()=>selectTestAnswer(i);
+      optsEl.appendChild(btn);
+    });
+  }
+}
+
+function toggleChip(btn,w,q){
+  if(chipsAnswered)return;
+  if(btn.classList.contains('sel')){btn.classList.remove('sel');selChips=selChips.filter(x=>x!==w);}
+  else{if(selChips.length>=q.n)return;btn.classList.add('sel');selChips.push(w);}
+  if(selChips.length===q.n) checkChips(q);
+}
+
+function checkChips(q){
+  chipsAnswered=true;
+  const cs=new Set(q.correct), ss=new Set(selChips);
+  const hits=q.correct.filter(w=>ss.has(w)).length;
+  const allCorrect=hits===q.correct.length&&selChips.length===q.n;
+  document.querySelectorAll('.chip').forEach(b=>{
+    const w=b.textContent;
+    if(cs.has(w)&&ss.has(w))b.className='chip correct';
+    else if(ss.has(w)&&!cs.has(w))b.className='chip wrong';
+    else if(cs.has(w)&&!ss.has(w))b.className='chip missed';
+  });
+  testAnswers.push({q,correct:allCorrect,type:'chips'});
+  const fb=document.getElementById('test-fb');
+  if(allCorrect){fb.className='test-feedback show good';fb.textContent='✅ Perfekt! Genau die richtigen Schlüsselwörter!';}
+  else{fb.className='test-feedback show bad';fb.textContent=`${hits} von ${q.n} richtig. 🟡 Richtig = grün, falsch = rot, verpasst = gelb.`;}
+  document.getElementById('test-next').style.display='block';
+}
+
+function selectTestAnswer(i){
+  if(document.getElementById('test-next').style.display==='block')return;
+  const q=testQueue[testIdx];
+  setTimeout(()=>{
+    const btns=document.querySelectorAll('.test-opt');
+    btns.forEach(b=>b.disabled=true);
+    const correct=i===q.a;
+    testAnswers.push({q,correct,type:'mc'});
+    btns[q.a].className='test-opt correct';
+    if(!correct)btns[i].className='test-opt wrong';
+    const fb=document.getElementById('test-fb');
+    fb.className=`test-feedback show ${correct?'good':'bad'}`;
+    fb.textContent=correct?'✅ Richtig!':`❌ Richtig wäre: "${q.opts[q.a]}" · ${q.e}`;
+    document.getElementById('test-next').style.display='block';
+  },300);
+}
+
+function testNext(){
+  testIdx++;
+  if(testIdx>=testQueue.length)showTestResult();else showTestQuestion();
+}
+
+function showTestResult(){
+  document.getElementById('test-running').style.display='none';
+  document.getElementById('test-result').style.display='block';
+  const correct=testAnswers.filter(a=>a.correct).length;
+  const total=testAnswers.length;
+  const pct=Math.round(correct/total*100);
+  document.getElementById('res-emoji').textContent=pct>=85?'🏆':pct>=70?'⭐':pct>=50?'💪':'📖';
+  document.getElementById('res-score').textContent=`${correct} / ${total} (${pct}%)`;
+  const cats={};
+  testAnswers.forEach(a=>{
+    if(!cats[a.q.cat])cats[a.q.cat]={c:0,t:0};
+    cats[a.q.cat].t++;
+    if(a.correct)cats[a.q.cat].c++;
+  });
+  let html='';
+  Object.entries(cats).forEach(([cat,v])=>{html+=`<div class="rb-row"><span>${cat}</span><span style="color:var(--accent)">${v.c}/${v.t}</span></div>`;});
+  document.getElementById('res-breakdown').innerHTML=html;
+}
+
+// INIT
+startGaps();
+loadFlashCards();
+// ═══════════════════════════════════════════
+const LESETEXTE = [
+  {
+    titel: '🌍 Klimawandel',
+    text: `Klimawandel nennt man die gegenwärtige Änderung des Klimas. Im Gegensatz zum Wetter bedeutet Klima, wie warm oder kalt es an einem Ort über längere Zeit ist. Normalerweise verändert sich das Klima sehr langsam, also über viele Jahrhunderte. Ein Mensch würde einen natürlichen Klimawandel innerhalb seines Lebens nicht bemerken.
+
+Zurzeit erleben wir aber einen Klimawandel, der wesentlich schneller voranschreitet. Die Ursache für diesen rasanten Klimawandel ist der Mensch. Seit der Industriellen Revolution verbrennen Menschen viel Holz und Kohle – dabei entsteht Kohlendioxid (CO₂). Außerdem wurden viele Wälder abgeholzt, die das CO₂ aus der Luft filtern könnten.
+
+Der sogenannte Treibhauseffekt sorgt dafür, dass es auf der Erde angenehm warm ist. Die Atmosphäre, also die Luft um unseren Planeten, enthält Treibhausgase. Diese Gase lassen das Sonnenlicht herein, aber die Wärme nur zum Teil wieder hinaus – ähnlich wie das Glas in einem Gewächshaus.`,
+    quelle: 'Sarahs Deutschbuch, Kapitel 5',
+    fragen: [
+      { type:'mc', q:'Was ist der Unterschied zwischen Klima und Wetter?',
+        opts:['Klima zeigt das heutige Wetter – Wetter beschreibt viele Jahre.','Klima zeigt, wie warm es über lange Zeit an einem Ort ist – Wetter ändert sich täglich.','Beides bedeutet dasselbe.'], a:1,
+        e:'Klima = langfristig an einem Ort · Wetter = kurzfristig, täglich veränderlich' },
+      { type:'chips', q:'Welche 3 Wörter sind die wichtigsten Schlüsselwörter des Textes?',
+        chips:['Klimawandel','Treibhauseffekt','Kohlendioxid','Wetter','Mensch','Atmosphäre','Holz','Jahrhunderte'],
+        correct:['Klimawandel','Treibhauseffekt','Kohlendioxid'], n:3 },
+      { type:'mc', q:'Womit vergleicht der Text den Treibhauseffekt?',
+        opts:['Mit einem Kühlschrank.','Mit dem Glas in einem Gewächshaus.','Mit einem Spiegel.'], a:1,
+        e:'Das Glas lässt Licht herein aber Wärme nicht vollständig hinaus – genau wie Treibhausgase.' },
+      { type:'open', q:'Erkläre in eigenen Worten: Warum ist der heutige Klimawandel gefährlicher als frühere Klimawandel?',
+        muster:'Frühere Klimawandel passierten sehr langsam über viele hundert Jahre. Der heutige Klimawandel geht viel schneller – innerhalb eines Menschenlebens. Die Ursache ist der Mensch: durch Verbrennen von Kohle und Holz entsteht CO₂, das die Erde aufheizt.' },
+      { type:'mc', q:'Welche Adverbialbestimmung steckt in: "Normalerweise verändert sich das Klima sehr langsam"?',
+        opts:['Adverbialbestimmung des Ortes','Adverbialbestimmung der Zeit','Adverbialbestimmung der Art und Weise'], a:2,
+        e:'"Normalerweise" und "sehr langsam" = Wie? → Art und Weise' },
+    ]
+  },
+  {
+    titel: '🐧 Pinguine & Klimawandel',
+    text: `Britische Wissenschaftler gehen davon aus, dass sich die Antarktische Halbinsel innerhalb der nächsten 100 Jahre sehr stark verändern wird.
+
+Sorge machen den Forschern die Pinguine. Die Tiere verlassen ihre Brutplätze, weil die ungewöhnlich warme Luft dort so viel Schnee fallen lässt, dass sie nicht lange genug auf ihren Nestern sitzen bleiben können. Sie wandern zum Brüten ins Innere der rund 14 Millionen Quadratkilometer großen Antarktis.
+
+Seitdem die antarktischen Winter milder werden, steigen die Wassertemperaturen und die Eismenge schrumpft. Weil das Nahrungsmittel Krill sich bei weniger dichten Eisschichten schlechter vermehren kann, geht die Anzahl der Pinguine zurück. Französische Forscher berichten, dass sich die Zahl der Kaiserpinguine in den vergangenen 50 Jahren halbiert hat.`,
+    quelle: 'Sarahs Deutschbuch, Kapitel 5, S. 135',
+    fragen: [
+      { type:'mc', q:'Warum verlassen die Pinguine ihre Brutplätze?',
+        opts:['Weil es dort zu kalt ist.','Weil zu viel Schnee fällt und sie nicht auf den Nestern bleiben können.','Weil Menschen sie stören.'], a:1,
+        e:'Die warme Luft bringt viel Schnee → Pinguine können nicht auf Nestern sitzen bleiben.' },
+      { type:'chips', q:'Welche 3 Wörter sind die wichtigsten Schlüsselwörter?',
+        chips:['Pinguine','Brutplätze','Krill','Kaiserpinguin','Schnee','Forscher','Eismenge','Antarktis'],
+        correct:['Pinguine','Krill','Eismenge'], n:3 },
+      { type:'mc', q:'Warum gibt es immer weniger Krill?',
+        opts:['Weil Menschen ihn fangen.','Weil er zu warm wird.','Weil er sich bei weniger dichtem Eis schlechter vermehren kann.'], a:2,
+        e:'Weniger Eis → Krill vermehrt sich schlechter → weniger Nahrung für Pinguine.' },
+      { type:'mc', q:'In welcher Zeitform steht: "Die Eismenge schrumpft"?',
+        opts:['Präteritum','Perfekt','Präsens'], a:2,
+        e:'Präsens → beschreibt einen gegenwärtigen Zustand.' },
+      { type:'open', q:'Fasse den Text in 2–3 Sätzen in eigenen Worten zusammen.',
+        muster:'Durch den Klimawandel werden die Winter in der Antarktis milder. Das schadet den Pinguinen: Sie müssen ihre Brutplätze verlassen und finden weniger Nahrung, weil der Krill sich bei weniger Eis schlechter vermehrt. Die Zahl der Kaiserpinguine hat sich in 50 Jahren halbiert.' },
+    ]
+  },
+  {
+    titel: '🐙 Tintenfische',
+    text: `Die Tintenfische sind Weichtiere, die im Meer leben. Sie zählen zur Klasse der Kopffüßer. Ihren Namen haben sie wegen dem Tintenbeutel in ihrem Körper. Bei Gefahr können sie daraus Tinte ausstoßen. Der angreifende Räuber soll die Tintenwolke mit dem Beutetier verwechseln.
+
+Zu den Tintenfischen zählen mehr als 500 Arten. Viele können sogar ihre Farbe verändern. Man unterscheidet Kraken, Sepien, Kalmare und andere.
+
+Am bekanntesten ist der Krake. Er wird wegen seiner acht Arme auch Oktopus genannt – das ist Lateinisch und heißt „Achtfüßer". Kraken haben einen sackförmigen Körper mit zwei großen Augen. Sie sind sehr beweglich und intelligent. Kraken können sich sogar einige Zeit außerhalb des Wassers aufhalten.
+
+Kalmare leben im freien Wasser. Sie haben einen kegelförmigen Körper und zehn Fangarme, von denen zwei besonders lang sind. Die Fortbewegung erfolgt über einen Trichter – ähnlich wie bei einer Rakete.`,
+    quelle: 'Klexikon (klexikon.zum.de) · Sarahs Deutschbuch S. 58–59',
+    fragen: [
+      { type:'mc', q:'Warum stoßen Tintenfische Tinte aus?',
+        opts:['Um sich zu ernähren.','Um den Räuber zu verwirren und zu fliehen.','Um zu kommunizieren.'], a:1,
+        e:'Die Tintenwolke soll den Räuber ablenken – er soll Tinte mit Beute verwechseln.' },
+      { type:'chips', q:'Welche 3 Wörter sind die wichtigsten Schlüsselwörter?',
+        chips:['Tintenfisch','Kopffüßer','Tintenbeutel','Krake','Farbe','Oktopus','Fangarme','Weichtier'],
+        correct:['Tintenfisch','Kopffüßer','Krake'], n:3 },
+      { type:'mc', q:'Was bedeutet „Oktopus" auf Lateinisch?',
+        opts:['Meerestier','Achtfüßer','Tintenfisch'], a:1,
+        e:'Okto = acht, pus = Fuß → Achtfüßer → wegen der acht Arme.' },
+      { type:'mc', q:'Wie bewegen sich Kalmare fort?',
+        opts:['Mit Flossen wie Fische.','Mit einem Trichter, aus dem sie Wasser pressen.','Mit ihren Fangarmen.'], a:1,
+        e:'Kalmare pressen Wasser durch einen Trichter – ähnlich wie eine Rakete.' },
+      { type:'open', q:'Nenne 2 Unterschiede zwischen einem Kraken und einem Kalmar.',
+        muster:'1. Kraken haben 8 Arme, Kalmare haben 10 Fangarme (davon 2 besonders lange). 2. Kraken haben einen sackförmigen Körper, Kalmare einen kegelförmigen. 3. Kalmare bewegen sich mit einem Trichter fort, Kraken „laufen" auf dem Meeresboden.' },
+    ]
+  },
+  {
+    titel: '🐋 Nordkaper – Wale in Not',
+    text: `Nordkaper, die seltensten Großwale der Welt, schwimmen am liebsten dort, wo die Fischer der nordamerikanischen Ostküste ihre Stellnetze und Hummerfallen auslegen – dicht an Land. In dem Labyrinth aus Seilen und Netzen verheddern sich die Tiere und geraten in Lebensgefahr.
+
+Als Tierschützer den Wal vor der Küste des US-Bundesstaates Georgia entdeckten, ist er im wahrsten Wortsinn verschnürt wie ein Postpaket. Fingerdicke Fischerei-Leinen hängen dem 12 Meter langen Tier rechts und links aus dem Maul.
+
+Den Walschützern bleibt nur ein Ausweg: Sie müssen den Wal mit Medikamenten betäuben – oder genauer gesagt, beruhigen. Vollständig einschlafen darf das Tier nicht, sonst liefe es Gefahr zu ertrinken.
+
+Beim ersten Versuch zeigt die Spritze keine Wirkung. Nach dem zweiten Versuch aber scheint der Wal wie betrunken. Die Boote stören ihn nicht mehr. Er lässt die Tierschützer so weit an sich heran, dass sie das Seilknäuel an seinem Kopf mit einer Messerlanze zerschneiden können.`,
+    quelle: 'geo.de · Sarahs Deutschbuch S. 54',
+    fragen: [
+      { type:'mc', q:'Warum ist der Nordkaper in Lebensgefahr?',
+        opts:['Weil er zu wenig Nahrung findet.','Weil er sich in Fischernetzen und Seilen verheddert hat.','Weil er krank ist.'], a:1,
+        e:'Er hat sich im Labyrinth aus Seilen und Fischernetzen verheddert.' },
+      { type:'chips', q:'Welche 3 Wörter sind die wichtigsten Schlüsselwörter?',
+        chips:['Nordkaper','Stellnetze','Lebensgefahr','Betäubung','Fischer','Tierschützer','Wal','Leinen'],
+        correct:['Nordkaper','Stellnetze','Betäubung'], n:3 },
+      { type:'mc', q:'Warum darf der Wal nicht vollständig einschlafen?',
+        opts:['Weil er dann zu tief sinkt.','Weil er sonst Gefahr läuft zu ertrinken.','Weil die Medikamente zu stark wären.'], a:1,
+        e:'Wale müssen aktiv atmen – schläft der Wal vollständig ein, kann er ertrinken.' },
+      { type:'mc', q:'"Den Walschützern bleibt nur ein Ausweg." – In welcher Zeitform steht das Verb?',
+        opts:['Präteritum','Präsens','Perfekt'], a:1,
+        e:'„bleibt" = Präsens · beschreibt hier eine Situation in der Vergangenheit (historisches Präsens).' },
+      { type:'open', q:'Fasse den Text in 2–3 Sätzen zusammen. Schreibe in eigenen Worten.',
+        muster:'Ein Nordkaper, der seltenste Großwal der Welt, hat sich in Fischernetzen verheddert und ist in Lebensgefahr. Tierschützer müssen ihn betäuben, damit sie die Seile durchschneiden können. Der Wal darf dabei aber nicht vollständig einschlafen, sonst würde er ertrinken.' },
+    ]
+  },
+];
+
+// ═══════════════════════════════════════════
+// LESE-TRAINING LOGIC
+// ═══════════════════════════════════════════
+let ltIdx = 0;
+let ltTextIdx = 0;
+let ltAnswers = [];
+let ltSelChips = [];
+let ltChipsAnswered = false;
+let ltTextVisible = false;
+
+function selectText(i, btn) {
+  ltTextIdx = i;
+  document.querySelectorAll('.sel-btn[id^="ltsel-"]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function startLesetraining() {
+  const t = LESETEXTE[ltTextIdx];
+  ltIdx = 0; ltAnswers = [];
+  document.getElementById('lt-start-card').style.display = 'none';
+  document.getElementById('lt-result').style.display = 'none';
+  document.getElementById('lt-questions').style.display = 'none';
+
+  // Show reading
+  document.getElementById('lt-reading').style.display = 'block';
+  document.getElementById('lt-text').innerHTML =
+    `<div class="lesetext-title">${t.titel}</div>${t.text.replace(/\n\n/g,'</p><p style="margin-top:10px">')}<div class="lesetext-source">Quelle: ${t.quelle}</div>`;
+}
+
+function startQuestions() {
+  document.getElementById('lt-reading').style.display = 'none';
+  document.getElementById('lt-questions').style.display = 'block';
+  // Set small text for reference
+  const t = LESETEXTE[ltTextIdx];
+  document.getElementById('lt-text-small').innerHTML =
+    t.text.replace(/\n\n/g,'</p><p style="margin-top:8px">');
+  ltTextVisible = false;
+  showLTQuestion();
+}
+
+function toggleText() {
+  ltTextVisible = !ltTextVisible;
+  document.getElementById('lt-text-collapse').style.display = ltTextVisible ? 'block' : 'none';
+  document.querySelector('#lt-text-ref button').textContent =
+    ltTextVisible ? '📖 Text zuklappen ▲' : '📖 Text nochmal lesen ▼';
+}
+
+function showLTQuestion() {
+  const t = LESETEXTE[ltTextIdx];
+  const q = t.fragen[ltIdx];
+  const total = t.fragen.length;
+
+  document.getElementById('lt-pbar').style.width = (ltIdx / total * 100) + '%';
+  document.getElementById('lt-counter').textContent = `Frage ${ltIdx + 1} von ${total}`;
+  document.getElementById('lt-q').textContent = q.q;
+  document.getElementById('lt-fb').className = 'test-feedback';
+  document.getElementById('lt-next').style.display = 'none';
+  ltSelChips = []; ltChipsAnswered = false;
+
+  // Hide all areas
+  document.getElementById('lt-mc-area').style.display = 'none';
+  document.getElementById('lt-open-area').style.display = 'none';
+  document.getElementById('lt-chips-area').style.display = 'none';
+
+  if (q.type === 'mc') {
+    document.getElementById('lt-mc-area').style.display = 'block';
+    const optsEl = document.getElementById('lt-opts');
+    optsEl.innerHTML = '';
+    q.opts.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'test-opt'; btn.textContent = opt;
+      btn.onclick = () => selectLTAnswer(i);
+      optsEl.appendChild(btn);
+    });
+  } else if (q.type === 'open') {
+    document.getElementById('lt-open-area').style.display = 'block';
+    document.getElementById('lt-open-answer').value = '';
+  } else if (q.type === 'chips') {
+    document.getElementById('lt-chips-area').style.display = 'block';
+    document.getElementById('lt-chips-hint').textContent = `Wähle die ${q.n} wichtigsten Wörter:`;
+    const container = document.getElementById('lt-chips');
+    container.innerHTML = '';
+    shuffle([...q.chips]).forEach(w => {
+      const btn = document.createElement('button');
+      btn.className = 'chip'; btn.textContent = w;
+      btn.onclick = () => toggleLTChip(btn, w, q);
+      container.appendChild(btn);
+    });
+  }
+}
+
+function selectLTAnswer(i) {
+  if (document.getElementById('lt-next').style.display === 'block') return;
+  const q = LESETEXTE[ltTextIdx].fragen[ltIdx];
+  const btns = document.querySelectorAll('#lt-opts .test-opt');
+  btns.forEach(b => b.disabled = true);
+  const correct = i === q.a;
+  ltAnswers.push({ correct, type: 'mc' });
+  btns[q.a].className = 'test-opt correct';
+  if (!correct) btns[i].className = 'test-opt wrong';
+  const fb = document.getElementById('lt-fb');
+  fb.className = `test-feedback show ${correct ? 'good' : 'bad'}`;
+  fb.textContent = correct ? '✅ Richtig!' : `❌ Richtig wäre: "${q.opts[q.a]}" · ${q.e}`;
+  document.getElementById('lt-next').style.display = 'block';
+}
+
+function toggleLTChip(btn, w, q) {
+  if (ltChipsAnswered) return;
+  if (btn.classList.contains('sel')) { btn.classList.remove('sel'); ltSelChips = ltSelChips.filter(x => x !== w); }
+  else { if (ltSelChips.length >= q.n) return; btn.classList.add('sel'); ltSelChips.push(w); }
+  if (ltSelChips.length === q.n) checkLTChips(q);
+}
+
+function checkLTChips(q) {
+  ltChipsAnswered = true;
+  const cs = new Set(q.correct), ss = new Set(ltSelChips);
+  const hits = q.correct.filter(w => ss.has(w)).length;
+  const allCorrect = hits === q.correct.length && ltSelChips.length === q.n;
+  document.querySelectorAll('#lt-chips .chip').forEach(b => {
+    const w = b.textContent;
+    if (cs.has(w) && ss.has(w)) b.className = 'chip correct';
+    else if (ss.has(w) && !cs.has(w)) b.className = 'chip wrong';
+    else if (cs.has(w) && !ss.has(w)) b.className = 'chip missed';
+  });
+  ltAnswers.push({ correct: allCorrect, type: 'chips' });
+  const fb = document.getElementById('lt-fb');
+  if (allCorrect) { fb.className = 'test-feedback show good'; fb.textContent = '✅ Perfekt! Genau die richtigen Schlüsselwörter!'; }
+  else { fb.className = 'test-feedback show bad'; fb.textContent = `${hits} von ${q.n} richtig. Grün = richtig, Rot = falsch, Gelb = vergessen.`; }
+  document.getElementById('lt-next').style.display = 'block';
+}
+
+function showMusterantwort() {
+  const q = LESETEXTE[ltTextIdx].fragen[ltIdx];
+  const answer = document.getElementById('lt-open-answer').value.trim();
+  ltAnswers.push({ correct: null, type: 'open' });
+  const fb = document.getElementById('lt-fb');
+  fb.className = 'test-feedback show good';
+  fb.innerHTML = `📝 <strong>Musterantwort:</strong><br>${q.muster}`;
+  document.getElementById('lt-open-area').style.display = 'none';
+  document.getElementById('lt-next').style.display = 'block';
+}
+
+function ltNext() {
+  ltIdx++;
+  const t = LESETEXTE[ltTextIdx];
+  if (ltIdx >= t.fragen.length) showLTResult();
+  else showLTQuestion();
+}
+
+function showLTResult() {
+  document.getElementById('lt-questions').style.display = 'none';
+  document.getElementById('lt-result').style.display = 'block';
+
+  const scored = ltAnswers.filter(a => a.correct !== null);
+  const correct = scored.filter(a => a.correct).length;
+  const total = scored.length;
+  const open = ltAnswers.filter(a => a.type === 'open').length;
+  const pct = total > 0 ? Math.round(correct / total * 100) : 100;
+
+  document.getElementById('lt-res-emoji').textContent = pct >= 85 ? '🏆' : pct >= 65 ? '⭐' : '💪';
+  document.getElementById('lt-res-score').textContent =
+    total > 0 ? `${correct} / ${total} Fragen richtig` : 'Alle Fragen beantwortet!';
+
+  let detail = '';
+  if (open > 0) detail += `<div style="margin-bottom:6px">📝 ${open} offene Frage${open>1?'n':''} – vergleiche deine Antwort mit der Musterantwort.</div>`;
+  detail += '<div>💡 Tipp: Lese den Text nochmal und schau dir die Schlüsselwörter an, die du verpasst hast.</div>';
+  document.getElementById('lt-res-detail').innerHTML = detail;
+}
+
+function backToLTStart() {
+  document.getElementById('lt-result').style.display = 'none';
+  document.getElementById('lt-start-card').style.display = 'block';
+}
+
+// INIT
+startGaps();
+loadFlashCards();
+</script>
+</body>
+</html>
