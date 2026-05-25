@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🇬🇧 Sarah lernt Englisch</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f1923;
+  --card: #1a2535;
+  --card2: #1f2e42;
+  --border: #2a3f5a;
+  --accent: #38bdf8;
+  --accent2: #818cf8;
+  --accent3: #34d399;
+  --orange: #fb923c;
+  --red: #f87171;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --r: 14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ── HEADER ── */
+.header {
+  background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+  padding: 20px 20px 0 20px;
+  text-align: center;
+}
+.header h1 {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: white;
+  margin-bottom: 4px;
+}
+.header p { font-size: .85rem; color: rgba(255,255,255,.8); margin-bottom: 16px; }
+
+/* ── TABS ── */
+.tabs {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  padding: 0 10px;
+}
+.tab {
+  padding: 10px 16px;
+  border-radius: 10px 10px 0 0;
+  border: none;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: .82rem;
+  cursor: pointer;
+  color: rgba(255,255,255,.7);
+  background: rgba(255,255,255,.1);
+  transition: all .2s;
+  white-space: nowrap;
+}
+.tab.active { background: var(--bg); color: var(--accent); }
+
+/* ── CONTENT ── */
+.content { padding: 20px 16px; max-width: 680px; margin: 0 auto; }
+
+.section { display: none; }
+.section.active { display: block; }
+
+/* ── CARDS ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+}
+.card-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── ZUSAMMENFASSUNG ── */
+.rule-box {
+  background: var(--card2);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border-left: 3px solid var(--accent);
+}
+.rule-box.green { border-left-color: var(--accent3); }
+.rule-box.purple { border-left-color: var(--accent2); }
+.rule-box.orange { border-left-color: var(--orange); }
+
+.prep-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.prep-col {
+  background: var(--card2);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+}
+.prep-key {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+.prep-key.at { color: var(--orange); }
+.prep-key.on { color: var(--accent2); }
+.prep-key.in { color: var(--accent); }
+.prep-examples {
+  font-size: .78rem;
+  color: var(--muted);
+  line-height: 1.7;
+  text-align: left;
+}
+
+.time-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.time-item {
+  background: var(--card2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: .85rem;
+}
+.time-item strong { color: var(--accent3); }
+
+.vocab-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.vocab-table th {
+  text-align: left;
+  color: var(--muted);
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+}
+.vocab-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.vocab-table tr:last-child td { border-bottom: none; }
+.vocab-table .en { color: var(--accent); font-weight: 700; }
+.vocab-table .de { color: var(--text); }
+
+/* ── LÜCKENTEXT ── */
+.gap-sentence {
+  font-size: 1rem;
+  line-height: 2;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.gap-input {
+  background: var(--card2);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .95rem;
+  padding: 4px 10px;
+  width: 110px;
+  text-align: center;
+  outline: none;
+  transition: border-color .2s;
+}
+.gap-input:focus { border-color: var(--accent); }
+.gap-input.correct { border-color: var(--accent3); background: rgba(52,211,153,.1); color: var(--accent3); }
+.gap-input.wrong { border-color: var(--red); background: rgba(248,113,113,.1); color: var(--red); }
+
+.gap-hint {
+  font-size: .78rem;
+  color: var(--muted);
+  margin-top: 4px;
+  display: none;
+}
+.gap-hint.show { display: block; }
+
+.btn {
+  padding: 11px 24px;
+  border-radius: 30px;
+  border: none;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: .95rem;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-primary { background: var(--accent); color: #0f1923; }
+.btn-primary:hover { background: #7dd3fc; }
+.btn-secondary { background: var(--card2); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+.btn-green { background: var(--accent3); color: #0f1923; }
+
+.gap-score {
+  background: var(--card2);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-top: 14px;
+  display: none;
+}
+.gap-score.show { display: block; }
+
+/* ── KARTEIKARTEN ── */
+.flashcard-container { perspective: 1000px; margin-bottom: 16px; }
+.flashcard {
+  width: 100%;
+  min-height: 160px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform .5s;
+  cursor: pointer;
+}
+.flashcard.flipped { transform: rotateY(180deg); }
+.fc-front, .fc-back {
+  position: absolute;
+  width: 100%;
+  min-height: 160px;
+  backface-visibility: hidden;
+  border-radius: var(--r);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px;
+  text-align: center;
+}
+.fc-front {
+  background: linear-gradient(135deg, #1a2535, #1f2e42);
+  border: 1px solid var(--border);
+}
+.fc-back {
+  background: linear-gradient(135deg, #0c3547, #0c2d3d);
+  border: 1px solid var(--accent);
+  transform: rotateY(180deg);
+}
+.fc-label {
+  font-size: .72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+.fc-word {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text);
+}
+.fc-back .fc-word { color: var(--accent); }
+.fc-tap { font-size: .75rem; color: var(--muted); margin-top: 8px; }
+
+.fc-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.fc-counter { color: var(--muted); font-size: .85rem; font-weight: 700; }
+.fc-btns { display: flex; gap: 8px; }
+
+.fc-progress {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.fc-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background .3s;
+}
+.fc-dot.seen { background: var(--accent2); }
+.fc-dot.known { background: var(--accent3); }
+
+/* ── TEST ── */
+.test-question {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.test-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.test-opt {
+  padding: 11px 16px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--card2);
+  color: var(--text);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  font-size: .93rem;
+  cursor: pointer;
+  text-align: left;
+  transition: all .18s;
+}
+.test-opt:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.test-opt.correct { border-color: var(--accent3); background: rgba(52,211,153,.1); color: var(--accent3); }
+.test-opt.wrong { border-color: var(--red); background: rgba(248,113,113,.1); color: var(--red); }
+.test-opt:disabled { cursor: default; }
+
+.test-feedback {
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: .88rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: none;
+}
+.test-feedback.show { display: block; }
+.test-feedback.good { background: rgba(52,211,153,.1); color: var(--accent3); border: 1px solid var(--accent3); }
+.test-feedback.bad { background: rgba(248,113,113,.1); color: var(--red); border: 1px solid var(--red); }
+
+.test-progress-bar {
+  background: var(--border);
+  border-radius: 10px;
+  height: 6px;
+  margin-bottom: 6px;
+}
+.test-progress-fill {
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  height: 6px;
+  border-radius: 10px;
+  transition: width .4s;
+}
+.test-counter { font-size: .78rem; color: var(--muted); text-align: right; margin-bottom: 16px; }
+
+/* ── RESULT ── */
+.result-screen {
+  text-align: center;
+  padding: 20px 0;
+}
+.result-emoji { font-size: 3rem; margin-bottom: 10px; }
+.result-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.result-score { font-size: 2.2rem; font-weight: 900; color: var(--accent3); margin-bottom: 16px; }
+.result-breakdown {
+  background: var(--card2);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: left;
+  margin-bottom: 16px;
+}
+.rb-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: .88rem;
+}
+.rb-row:last-child { border-bottom: none; }
+
+/* ── BADGE MODULE ── */
+.mod-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: 12px;
+  color: #0f1923;
+}
+.badge-vocab { background: var(--accent3); }
+.badge-prep { background: var(--orange); }
+.badge-time { background: var(--accent2); color: white; }
+
+.select-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.sel-btn {
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--card2);
+  color: var(--muted);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .8rem;
+  cursor: pointer;
+  transition: all .18s;
+}
+.sel-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(56,189,248,.08); }
+
+hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+/* ── COLLAPSIBLE ── */
+.collapsible-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  padding: 14px 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 6px;
+  transition: background .18s;
+}
+.collapsible-header:hover { background: var(--card2); }
+.collapsible-header.open { border-radius: var(--r) var(--r) 0 0; border-bottom: none; margin-bottom: 0; }
+.collapsible-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.collapsible-arrow {
+  color: var(--muted);
+  font-size: .9rem;
+  transition: transform .3s;
+}
+.collapsible-header.open .collapsible-arrow { transform: rotate(180deg); }
+.collapsible-body {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--r) var(--r);
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .35s ease, padding .35s ease;
+  margin-bottom: 10px;
+}
+.collapsible-body.open {
+  max-height: 2000px;
+  padding: 14px 18px 18px 18px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🇬🇧 Sarah lernt Englisch</h1>
+  <p>Unit 11 & 12 · Vokabeln · Präpositionen · Uhrzeiten</p>
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('zusammenfassung',this)">📖 Zusammenfassung</button>
+    <button class="tab" onclick="showTab('lueckentext',this)">✏️ Lückentext</button>
+    <button class="tab" onclick="showTab('karteikarten',this)">🃏 Karteikarten</button>
+    <button class="tab" onclick="showTab('test',this)">🎯 Test</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════
+     ZUSAMMENFASSUNG
+══════════════════════════════ -->
+<div class="section active" id="sec-zusammenfassung">
+
+  <!-- AT ON IN -->
+  <div class="collapsible-header open" onclick="toggleBlock(this)">
+    <span class="collapsible-title">⏰ Prepositions of Time: AT – ON – IN</span>
+    <span class="collapsible-arrow">▼</span>
+  </div>
+  <div class="collapsible-body open">
+    <div class="prep-grid">
+      <div class="prep-col">
+        <div class="prep-key at">AT</div>
+        <div class="prep-examples">
+          at 8 o'clock<br>at half past six<br>at midnight<br>at noon<br>at Christmas<br>at Easter<br>at the weekend<br>at night<br>at lunchtime
+        </div>
+      </div>
+      <div class="prep-col">
+        <div class="prep-key on">ON</div>
+        <div class="prep-examples">
+          on Monday<br>on Tuesday<br>on the weekend<br>on my birthday<br>on Christmas Day<br>on 3rd May<br>on Monday morning<br>on a sunny day
+        </div>
+      </div>
+      <div class="prep-col">
+        <div class="prep-key in">IN</div>
+        <div class="prep-examples">
+          in the morning<br>in the afternoon<br>in the evening<br>in January<br>in summer<br>in 2006<br>in the 19th century<br>in winter
+        </div>
+      </div>
+    </div>
+    <div class="rule-box">
+      <strong style="color:var(--orange)">Regel:</strong> AT = genaue Zeit/Feiertage · ON = Tage/Daten · IN = Monate/Jahreszeiten/Jahre
+    </div>
+    <div class="rule-box orange">
+      ⚠️ <strong style="color:var(--orange)">Achtung:</strong> "at night" (NICHT "in the night") · "in the morning/afternoon/evening" (NICHT "at the morning")
+    </div>
+  </div>
+
+  <!-- TELLING THE TIME -->
+  <div class="collapsible-header" onclick="toggleBlock(this)">
+    <span class="collapsible-title">🕐 Telling the Time</span>
+    <span class="collapsible-arrow">▼</span>
+  </div>
+  <div class="collapsible-body">
+    <div class="time-grid">
+      <div class="time-item">3:00 → <strong>three o'clock</strong></div>
+      <div class="time-item">3:05 → <strong>five past three</strong></div>
+      <div class="time-item">3:10 → <strong>ten past three</strong></div>
+      <div class="time-item">3:15 → <strong>quarter past three</strong></div>
+      <div class="time-item">3:20 → <strong>twenty past three</strong></div>
+      <div class="time-item">3:25 → <strong>twenty-five past three</strong></div>
+      <div class="time-item">3:30 → <strong>half past three</strong></div>
+      <div class="time-item">3:35 → <strong>twenty-five to four</strong></div>
+      <div class="time-item">3:40 → <strong>twenty to four</strong></div>
+      <div class="time-item">3:45 → <strong>quarter to four</strong></div>
+      <div class="time-item">3:50 → <strong>ten to four</strong></div>
+      <div class="time-item">3:55 → <strong>five to four</strong></div>
+    </div>
+    <div class="rule-box green">
+      ✅ Bis :30 → <strong>past</strong> (Minuten NACH der Stunde) · Ab :35 → <strong>to</strong> (Minuten BIS zur nächsten Stunde)
+    </div>
+    <div class="rule-box purple">
+      💡 Frage: <strong>"What time is it?"</strong> → Antwort: <strong>"It's quarter past four."</strong> (KEIN "at" in der Antwort!)
+    </div>
+  </div>
+
+  <!-- ORDINAL NUMBERS -->
+  <div class="collapsible-header" onclick="toggleBlock(this)">
+    <span class="collapsible-title">🔢 Ordinal Numbers</span>
+    <span class="collapsible-arrow">▼</span>
+  </div>
+  <div class="collapsible-body">
+    <div class="time-grid">
+      <div class="time-item">1st → <strong>first</strong></div>
+      <div class="time-item">2nd → <strong>second</strong></div>
+      <div class="time-item">3rd → <strong>third</strong></div>
+      <div class="time-item">4th → <strong>fourth</strong></div>
+      <div class="time-item">5th → <strong>fifth</strong></div>
+      <div class="time-item">6th → <strong>sixth</strong></div>
+      <div class="time-item">7th → <strong>seventh</strong></div>
+      <div class="time-item">8th → <strong>eighth</strong></div>
+      <div class="time-item">9th → <strong>ninth</strong></div>
+      <div class="time-item">10th → <strong>tenth</strong></div>
+      <div class="time-item">11th → <strong>eleventh</strong></div>
+      <div class="time-item">12th → <strong>twelfth</strong></div>
+      <div class="time-item">20th → <strong>twentieth</strong></div>
+      <div class="time-item">21st → <strong>twenty-first</strong></div>
+    </div>
+    <div class="rule-box">
+      💡 Datum sagen: <strong>"It's the third of May."</strong> / <strong>"May the third."</strong>
+    </div>
+  </div>
+
+  <!-- VOKABELN -->
+  <div class="collapsible-header" onclick="toggleBlock(this)">
+    <span class="collapsible-title">📚 Vokabeln Unit 11 & 12</span>
+    <span class="collapsible-arrow">▼</span>
+  </div>
+  <div class="collapsible-body">
+    <table class="vocab-table">
+      <tr><th>English</th><th>Deutsch</th></tr>
+      <tr><td class="en">timetable</td><td class="de">Stundenplan</td></tr>
+      <tr><td class="en">subject</td><td class="de">Schulfach</td></tr>
+      <tr><td class="en">break / lunch break</td><td class="de">Pause / Mittagspause</td></tr>
+      <tr><td class="en">canteen</td><td class="de">Kantine, Mensa</td></tr>
+      <tr><td class="en">bell</td><td class="de">Klingel, Glocke</td></tr>
+      <tr><td class="en">early</td><td class="de">früh, zeitig</td></tr>
+      <tr><td class="en">late</td><td class="de">spät</td></tr>
+      <tr><td class="en">to arrive</td><td class="de">ankommen</td></tr>
+      <tr><td class="en">to leave</td><td class="de">verlassen, abfahren</td></tr>
+      <tr><td class="en">to start / begin</td><td class="de">beginnen, anfangen</td></tr>
+      <tr><td class="en">to finish / end</td><td class="de">beenden, aufhören</td></tr>
+      <tr><td class="en">to hurry</td><td class="de">sich beeilen</td></tr>
+      <tr><td class="en">usually</td><td class="de">normalerweise, meistens</td></tr>
+      <tr><td class="en">always</td><td class="de">immer</td></tr>
+      <tr><td class="en">never</td><td class="de">nie, niemals</td></tr>
+      <tr><td class="en">sometimes</td><td class="de">manchmal</td></tr>
+      <tr><td class="en">often</td><td class="de">oft</td></tr>
+      <tr><td class="en">half past</td><td class="de">halb (+ nächste Stunde)</td></tr>
+      <tr><td class="en">quarter past</td><td class="de">Viertel nach</td></tr>
+      <tr><td class="en">quarter to</td><td class="de">Viertel vor</td></tr>
+      <tr><td class="en">o'clock</td><td class="de">Uhr (genau)</td></tr>
+      <tr><td class="en">midnight</td><td class="de">Mitternacht</td></tr>
+      <tr><td class="en">noon / midday</td><td class="de">Mittag</td></tr>
+      <tr><td class="en">alarm clock</td><td class="de">Wecker</td></tr>
+      <tr><td class="en">train / bus</td><td class="de">Zug / Bus</td></tr>
+      <tr><td class="en">platform</td><td class="de">Bahnsteig, Gleis</td></tr>
+      <tr><td class="en">ticket</td><td class="de">Fahrkarte, Ticket</td></tr>
+      <tr><td class="en">journey</td><td class="de">Reise, Fahrt</td></tr>
+      <tr><td class="en">to travel</td><td class="de">reisen, fahren</td></tr>
+      <tr><td class="en">on time</td><td class="de">pünktlich</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════
+     LÜCKENTEXT
+══════════════════════════════ -->
+<div class="section" id="sec-lueckentext">
+
+  <div class="card">
+    <div class="select-row">
+      <button class="sel-btn active" id="sel-prep" onclick="selectGapTopic('prep',this)">⏰ at/on/in</button>
+      <button class="sel-btn" id="sel-time" onclick="selectGapTopic('time',this)">🕐 Telling the time</button>
+    </div>
+
+    <!-- Progress -->
+    <div class="test-progress-bar"><div class="test-progress-fill" id="gap-pbar"></div></div>
+    <div class="test-counter" id="gap-counter">Satz 1 von 18</div>
+
+    <!-- Single sentence -->
+    <div id="gap-single">
+      <div class="mod-badge" id="gap-badge">at / on / in</div>
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:16px;" id="gap-instruction">Fill in: <strong style="color:var(--orange)">at</strong>, <strong style="color:var(--accent2)">on</strong> or <strong style="color:var(--accent)">in</strong>.</p>
+
+      <div class="gap-sentence" id="gap-display" style="font-size:1.1rem;margin-bottom:16px;"></div>
+
+      <input class="gap-input" id="gap-answer" type="text"
+             autocomplete="off" autocorrect="off" spellcheck="false"
+             style="width:140px;font-size:1rem;margin-bottom:14px"
+             placeholder="your answer"
+             onkeydown="if(event.key==='Enter') checkSingleGap()">
+
+      <div class="test-feedback" id="gap-fb"></div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" id="gap-check-btn" onclick="checkSingleGap()">Check ✓</button>
+        <button class="btn btn-primary" id="gap-next-btn" onclick="nextSingleGap()" style="display:none">Next →</button>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div id="gap-result" style="display:none;text-align:center;padding:10px 0">
+      <div style="font-size:2rem;margin-bottom:8px" id="gap-res-emoji">🎉</div>
+      <div style="font-family:'Baloo 2',sans-serif;font-size:1.2rem;font-weight:800;color:var(--accent);margin-bottom:6px">Fertig!</div>
+      <div style="font-size:1.6rem;font-weight:900;color:var(--accent3);margin-bottom:16px" id="gap-res-score"></div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="startGaps()">Nochmal 🔄</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     KARTEIKARTEN
+══════════════════════════════ -->
+<div class="section" id="sec-karteikarten">
+  <div class="card">
+    <div class="select-row">
+      <button class="sel-btn active" id="fsel-vocab" onclick="selectFlashTopic('vocab',this)">📚 Vokabeln</button>
+      <button class="sel-btn" id="fsel-time" onclick="selectFlashTopic('time',this)">🕐 Uhrzeiten</button>
+      <button class="sel-btn" id="fsel-ord" onclick="selectFlashTopic('ord',this)">🔢 Ordinals</button>
+    </div>
+
+    <div class="fc-nav">
+      <button class="btn btn-secondary" style="padding:7px 14px;font-size:.8rem" onclick="fcPrev()">← Back</button>
+      <span class="fc-counter" id="fc-counter">1 / 30</span>
+      <button class="btn btn-primary" style="padding:7px 14px;font-size:.8rem" onclick="fcNext()">Next →</button>
+    </div>
+
+    <div class="fc-progress" id="fc-dots"></div>
+
+    <div class="flashcard-container">
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div class="fc-front">
+          <div class="fc-label">English</div>
+          <div class="fc-word" id="fc-front-word">timetable</div>
+          <div class="fc-tap">👆 tap to flip</div>
+        </div>
+        <div class="fc-back">
+          <div class="fc-label" id="fc-back-label">Deutsch</div>
+          <div class="fc-word" id="fc-back-word">Stundenplan</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:14px">
+      <button class="btn btn-secondary" style="font-size:.85rem" onclick="markCard(false)">❌ Noch üben</button>
+      <button class="btn btn-green" style="font-size:.85rem" onclick="markCard(true)">✅ Kann ich!</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     TEST
+══════════════════════════════ -->
+<div class="section" id="sec-test">
+
+  <div id="test-start">
+    <div class="card" style="text-align:center">
+      <div style="font-size:2rem;margin-bottom:10px">🎯</div>
+      <div style="font-family:'Baloo 2',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:8px">Test starten</div>
+      <div style="color:var(--muted);font-size:.88rem;margin-bottom:16px">20 Fragen · alle Themen gemischt<br>Erst am Schluss siehst du das Ergebnis!</div>
+      <div class="select-row" style="justify-content:center;margin-bottom:16px">
+        <button class="sel-btn active" id="tsel-all" onclick="selectTestTopic('all',this)">Alles</button>
+        <button class="sel-btn" id="tsel-prep" onclick="selectTestTopic('prep',this)">at/on/in</button>
+        <button class="sel-btn" id="tsel-time" onclick="selectTestTopic('time',this)">Uhrzeiten</button>
+        <button class="sel-btn" id="tsel-vocab" onclick="selectTestTopic('vocab',this)">Vokabeln</button>
+      </div>
+      <button class="btn btn-primary" onclick="startTest()">Test starten 🚀</button>
+    </div>
+  </div>
+
+  <div id="test-running" style="display:none">
+    <div class="test-progress-bar"><div class="test-progress-fill" id="test-pbar"></div></div>
+    <div class="test-counter" id="test-counter">Frage 1 von 20</div>
+    <div class="card" id="test-card">
+      <div class="test-question" id="test-q"></div>
+      <div class="test-options" id="test-opts"></div>
+      <div class="test-feedback" id="test-fb"></div>
+      <button class="btn btn-primary" id="test-next" onclick="testNext()" style="display:none">Weiter →</button>
+    </div>
+  </div>
+
+  <div id="test-result" style="display:none">
+    <div class="card result-screen">
+      <div class="result-emoji" id="res-emoji"></div>
+      <div class="result-title">Test abgeschlossen!</div>
+      <div class="result-score" id="res-score"></div>
+      <div class="result-breakdown" id="res-breakdown"></div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="startTest()">Nochmal 🔄</button>
+        <button class="btn btn-secondary" onclick="showTab('zusammenfassung',null)">Zusammenfassung 📖</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</div><!-- /content -->
+
+<script>
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
+
+const PREP_GAPS = [
+  {s:"I go to bed ___ 8 p.m.", a:"at", hint:"AT + exact time"},
+  {s:"The party is ___ Saturday.", a:"on", hint:"ON + day of the week"},
+  {s:"We have holidays ___ Christmas.", a:"at", hint:"AT + holidays"},
+  {s:"She was born ___ December.", a:"in", hint:"IN + month"},
+  {s:"The test is ___ the morning.", a:"in", hint:"IN + part of the day"},
+  {s:"We go to the cinema ___ Tuesday evening.", a:"on", hint:"ON + day + time"},
+  {s:"He was born ___ 1980.", a:"in", hint:"IN + year"},
+  {s:"School starts ___ half past eight.", a:"at", hint:"AT + exact time"},
+  {s:"She always sleeps well ___ night.", a:"at", hint:"'at night' is fixed!"},
+  {s:"The concert is ___ the 15th of May.", a:"on", hint:"ON + date"},
+  {s:"She goes for a walk ___ the weekend.", a:"at", hint:"'at the weekend' (British English)"},
+  {s:"We learn more outside ___ spring.", a:"in", hint:"IN + season"},
+  {s:"The class begins ___ lunchtime.", a:"at", hint:"'at lunchtime' is fixed!"},
+  {s:"The letter arrived ___ my birthday.", a:"on", hint:"ON + special day"},
+  {s:"I have a snack ___ the afternoon.", a:"in", hint:"IN + part of the day"},
+  {s:"The football match is ___ Friday.", a:"on", hint:"ON + day of the week"},
+  {s:"She wakes up ___ 7 o'clock every day.", a:"at", hint:"AT + exact time"},
+  {s:"We go skiing ___ winter.", a:"in", hint:"IN + season"},
+];
+
+const TIME_GAPS = [
+  {s:"It's 3:00. → It's ___.", a:"three o'clock", hint:"exact hour → o'clock"},
+  {s:"It's 4:15. → It's ___.", a:"quarter past four", hint:"15 min → quarter past"},
+  {s:"It's 6:30. → It's ___.", a:"half past six", hint:"30 min → half past"},
+  {s:"It's 8:45. → It's ___.", a:"quarter to nine", hint:"45 min → quarter to (next hour)"},
+  {s:"It's 2:10. → It's ___.", a:"ten past two", hint:"10 min after → ten past"},
+  {s:"It's 5:50. → It's ___.", a:"ten to six", hint:"10 min before → ten to"},
+  {s:"It's 7:20. → It's ___.", a:"twenty past seven", hint:"20 min after → twenty past"},
+  {s:"It's 9:35. → It's ___.", a:"twenty-five to ten", hint:"25 min before → twenty-five to"},
+  {s:"It's 1:05. → It's ___.", a:"five past one", hint:"5 min after → five past"},
+  {s:"It's 11:55. → It's ___.", a:"five to twelve", hint:"5 min before → five to"},
+];
+
+const VOCAB_CARDS = [
+  {en:"timetable",de:"Stundenplan"},
+  {en:"subject",de:"Schulfach"},
+  {en:"break",de:"Pause"},
+  {en:"lunch break",de:"Mittagspause"},
+  {en:"canteen",de:"Kantine, Mensa"},
+  {en:"bell",de:"Klingel, Glocke"},
+  {en:"early",de:"früh, zeitig"},
+  {en:"late",de:"spät"},
+  {en:"to arrive",de:"ankommen"},
+  {en:"to leave",de:"verlassen, abfahren"},
+  {en:"to start / begin",de:"beginnen, anfangen"},
+  {en:"to finish / end",de:"beenden, aufhören"},
+  {en:"to hurry",de:"sich beeilen"},
+  {en:"usually",de:"normalerweise, meistens"},
+  {en:"always",de:"immer"},
+  {en:"never",de:"nie, niemals"},
+  {en:"sometimes",de:"manchmal"},
+  {en:"often",de:"oft"},
+  {en:"on time",de:"pünktlich"},
+  {en:"alarm clock",de:"Wecker"},
+  {en:"midnight",de:"Mitternacht"},
+  {en:"noon / midday",de:"Mittag"},
+  {en:"ticket",de:"Fahrkarte, Ticket"},
+  {en:"platform",de:"Bahnsteig, Gleis"},
+  {en:"journey",de:"Reise, Fahrt"},
+  {en:"to travel",de:"reisen, fahren"},
+  {en:"train",de:"Zug"},
+  {en:"bus",de:"Bus"},
+  {en:"o'clock",de:"Uhr (genau)"},
+  {en:"half past",de:"halb (+ nächste Stunde)"},
+];
+
+const TIME_CARDS = [
+  {en:"3:00",de:"three o'clock"},
+  {en:"3:05",de:"five past three"},
+  {en:"3:10",de:"ten past three"},
+  {en:"3:15",de:"quarter past three"},
+  {en:"3:20",de:"twenty past three"},
+  {en:"3:25",de:"twenty-five past three"},
+  {en:"3:30",de:"half past three"},
+  {en:"3:35",de:"twenty-five to four"},
+  {en:"3:40",de:"twenty to four"},
+  {en:"3:45",de:"quarter to four"},
+  {en:"3:50",de:"ten to four"},
+  {en:"3:55",de:"five to four"},
+  {en:"12:00 (day)",de:"noon / midday"},
+  {en:"12:00 (night)",de:"midnight"},
+];
+
+const ORD_CARDS = [
+  {en:"1st",de:"first · erste/r/s"},
+  {en:"2nd",de:"second · zweite/r/s"},
+  {en:"3rd",de:"third · dritte/r/s"},
+  {en:"4th",de:"fourth · vierte/r/s"},
+  {en:"5th",de:"fifth · fünfte/r/s"},
+  {en:"6th",de:"sixth · sechste/r/s"},
+  {en:"7th",de:"seventh · siebte/r/s"},
+  {en:"8th",de:"eighth · achte/r/s"},
+  {en:"9th",de:"ninth · neunte/r/s"},
+  {en:"10th",de:"tenth · zehnte/r/s"},
+  {en:"11th",de:"eleventh · elfte/r/s"},
+  {en:"12th",de:"twelfth · zwölfte/r/s"},
+  {en:"13th",de:"thirteenth · dreizehnte/r/s"},
+  {en:"20th",de:"twentieth · zwanzigste/r/s"},
+  {en:"21st",de:"twenty-first · einundzwanzigste/r/s"},
+  {en:"30th",de:"thirtieth · dreißigste/r/s"},
+  {en:"31st",de:"thirty-first · einunddreißigste/r/s"},
+];
+
+const TEST_QUESTIONS = [
+  // AT ON IN
+  {q:"The school trip is ___ Monday.",opts:["at","on","in"],a:1,cat:"at/on/in"},
+  {q:"I usually have breakfast ___ 7 o'clock.",opts:["at","on","in"],a:0,cat:"at/on/in"},
+  {q:"My birthday is ___ July.",opts:["at","on","in"],a:2,cat:"at/on/in"},
+  {q:"We always go skiing ___ winter.",opts:["at","on","in"],a:2,cat:"at/on/in"},
+  {q:"The bus arrives ___ half past eight.",opts:["at","on","in"],a:0,cat:"at/on/in"},
+  {q:"She was born ___ the 5th of March.",opts:["at","on","in"],a:1,cat:"at/on/in"},
+  {q:"We have a test ___ the morning.",opts:["at","on","in"],a:2,cat:"at/on/in"},
+  {q:"They always eat together ___ Christmas.",opts:["at","on","in"],a:0,cat:"at/on/in"},
+  // TELLING THE TIME
+  {q:"How do you say 4:15 in English?",opts:["quarter to four","quarter past four","four fifteen past"],a:1,cat:"Uhrzeiten"},
+  {q:"How do you say 6:30 in English?",opts:["half to six","six and half","half past six"],a:2,cat:"Uhrzeiten"},
+  {q:"How do you say 8:45 in English?",opts:["quarter past nine","quarter to nine","forty-five past eight"],a:1,cat:"Uhrzeiten"},
+  {q:"How do you say 2:50 in English?",opts:["ten past two","ten to three","fifty past two"],a:1,cat:"Uhrzeiten"},
+  {q:"'What time is it?' – 'It's ___ five o'clock.'",opts:["at","–","in"],a:1,cat:"Uhrzeiten"},
+  // VOCAB
+  {q:"What is the English word for 'Stundenplan'?",opts:["timetable","schedule book","classplan"],a:0,cat:"Vokabeln"},
+  {q:"What does 'to hurry' mean?",opts:["warten","sich beeilen","ankommen"],a:1,cat:"Vokabeln"},
+  {q:"What is 'Mittagspause' in English?",opts:["break","lunchtime","lunch break"],a:2,cat:"Vokabeln"},
+  {q:"What does 'on time' mean?",opts:["zu spät","pünktlich","zu früh"],a:1,cat:"Vokabeln"},
+  {q:"What is the English word for 'Wecker'?",opts:["clock","alarm clock","watch"],a:1,cat:"Vokabeln"},
+  {q:"What does 'to arrive' mean?",opts:["abfahren","ankommen","verlassen"],a:1,cat:"Vokabeln"},
+  {q:"How do you say 'manchmal' in English?",opts:["often","never","sometimes"],a:2,cat:"Vokabeln"},
+];
+
+// ═══════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════
+function showTab(name, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sec-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  else {
+    const tabs = {zusammenfassung:0,lueckentext:1,karteikarten:2,test:3};
+    document.querySelectorAll('.tab')[tabs[name]]?.classList.add('active');
+  }
+}
+
+// ═══════════════════════════════════════════
+// LÜCKENTEXT
+// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════
+// LÜCKENTEXT – one at a time
+// ═══════════════════════════════════════════
+let gapTopic = 'prep';
+let gapQueue = [];
+let gapIdx = 0;
+let gapCorrect = 0;
+
+function selectGapTopic(t, btn) {
+  gapTopic = t;
+  document.querySelectorAll('.sel-btn[id^="sel-"]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  startGaps();
+}
+
+function startGaps() {
+  const data = gapTopic === 'prep' ? PREP_GAPS : TIME_GAPS;
+  gapQueue = shuffle([...data]);
+  gapIdx = 0;
+  gapCorrect = 0;
+  document.getElementById('gap-result').style.display = 'none';
+  document.getElementById('gap-single').style.display = 'block';
+
+  // Badge + instruction
+  if (gapTopic === 'prep') {
+    document.getElementById('gap-badge').textContent = 'at / on / in';
+    document.getElementById('gap-badge').className = 'mod-badge badge-prep';
+    document.getElementById('gap-instruction').innerHTML = 'Fill in: <strong style="color:var(--orange)">at</strong>, <strong style="color:var(--accent2)">on</strong> or <strong style="color:var(--accent)">in</strong>.';
+  } else {
+    document.getElementById('gap-badge').textContent = 'Telling the time';
+    document.getElementById('gap-badge').className = 'mod-badge badge-time';
+    document.getElementById('gap-instruction').innerHTML = 'Write the time in words. Example: 3:15 → <em>quarter past three</em>';
+  }
+  showGapQuestion();
+}
+
+function showGapQuestion() {
+  const item = gapQueue[gapIdx];
+  const total = gapQueue.length;
+  document.getElementById('gap-pbar').style.width = (gapIdx / total * 100) + '%';
+  document.getElementById('gap-counter').textContent = `Satz ${gapIdx + 1} von ${total}`;
+
+  // Build sentence with blank shown as ___
+  const sentence = item.s.replace('___', '<span style="color:var(--accent);font-weight:800">___</span>');
+  document.getElementById('gap-display').innerHTML = sentence;
+
+  const inp = document.getElementById('gap-answer');
+  inp.value = '';
+  inp.disabled = false;
+  inp.className = 'gap-input';
+  inp.style.width = gapTopic === 'time' ? '220px' : '100px';
+
+  document.getElementById('gap-fb').className = 'test-feedback';
+  document.getElementById('gap-check-btn').style.display = 'inline-block';
+  document.getElementById('gap-next-btn').style.display = 'none';
+  setTimeout(() => inp.focus(), 100);
+}
+
+function checkSingleGap() {
+  const item = gapQueue[gapIdx];
+  const inp = document.getElementById('gap-answer');
+  const val = inp.value.trim().toLowerCase();
+  const expected = item.a.toLowerCase();
+  const correct = val === expected;
+
+  inp.disabled = true;
+  inp.className = 'gap-input ' + (correct ? 'correct' : 'wrong');
+
+  const fb = document.getElementById('gap-fb');
+  if (correct) {
+    gapCorrect++;
+    fb.className = 'test-feedback show good';
+    fb.textContent = '✅ Correct!';
+  } else {
+    fb.className = 'test-feedback show bad';
+    fb.innerHTML = `❌ The answer is: <strong style="color:var(--accent3)">${item.a}</strong> · ${item.hint}`;
+  }
+
+  document.getElementById('gap-check-btn').style.display = 'none';
+  document.getElementById('gap-next-btn').style.display = 'inline-block';
+}
+
+function nextSingleGap() {
+  gapIdx++;
+  if (gapIdx >= gapQueue.length) {
+    showGapResult();
+  } else {
+    showGapQuestion();
+  }
+}
+
+function showGapResult() {
+  document.getElementById('gap-single').style.display = 'none';
+  document.getElementById('gap-result').style.display = 'block';
+  const pct = Math.round(gapCorrect / gapQueue.length * 100);
+  document.getElementById('gap-res-emoji').textContent = pct >= 85 ? '🏆' : pct >= 65 ? '⭐' : '💪';
+  document.getElementById('gap-res-score').textContent = `${gapCorrect} / ${gapQueue.length} correct (${pct}%)`;
+  document.getElementById('gap-pbar').style.width = '100%';
+  document.getElementById('gap-counter').textContent = 'Fertig!';
+}
+
+// ═══════════════════════════════════════════
+// KARTEIKARTEN
+// ═══════════════════════════════════════════
+let fcTopic = 'vocab';
+let fcCards = [];
+let fcIdx = 0;
+let fcKnown = new Set();
+let fcSeen = new Set();
+
+function selectFlashTopic(t, btn) {
+  fcTopic = t;
+  document.querySelectorAll('.sel-btn[id^="fsel-"]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadFlashCards();
+}
+
+function loadFlashCards() {
+  if (fcTopic === 'vocab') fcCards = VOCAB_CARDS;
+  else if (fcTopic === 'time') fcCards = TIME_CARDS;
+  else fcCards = ORD_CARDS;
+  fcIdx = 0; fcKnown = new Set(); fcSeen = new Set();
+  document.getElementById('flashcard').classList.remove('flipped');
+  updateFlashCard();
+  buildDots();
+}
+
+function updateFlashCard() {
+  const c = fcCards[fcIdx];
+  document.getElementById('fc-front-word').textContent = c.en;
+  document.getElementById('fc-back-word').textContent = c.de;
+  document.getElementById('fc-back-label').textContent =
+    fcTopic === 'ord' ? 'English · Deutsch' :
+    fcTopic === 'time' ? 'English (words)' : 'Deutsch';
+  document.getElementById('fc-counter').textContent = `${fcIdx + 1} / ${fcCards.length}`;
+  document.getElementById('flashcard').classList.remove('flipped');
+  fcSeen.add(fcIdx);
+  updateDots();
+}
+
+function flipCard() {
+  document.getElementById('flashcard').classList.toggle('flipped');
+}
+
+function fcNext() {
+  if (fcIdx < fcCards.length - 1) { fcIdx++; updateFlashCard(); }
+}
+
+function fcPrev() {
+  if (fcIdx > 0) { fcIdx--; updateFlashCard(); }
+}
+
+function markCard(known) {
+  if (known) fcKnown.add(fcIdx);
+  else fcKnown.delete(fcIdx);
+  updateDots();
+  fcNext();
+}
+
+function buildDots() {
+  const container = document.getElementById('fc-dots');
+  container.innerHTML = '';
+  fcCards.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'fc-dot';
+    d.id = `dot-${i}`;
+    container.appendChild(d);
+  });
+}
+
+function updateDots() {
+  fcCards.forEach((_, i) => {
+    const d = document.getElementById(`dot-${i}`);
+    if (!d) return;
+    if (fcKnown.has(i)) d.className = 'fc-dot known';
+    else if (fcSeen.has(i)) d.className = 'fc-dot seen';
+    else d.className = 'fc-dot';
+  });
+}
+
+// ═══════════════════════════════════════════
+// TEST
+// ═══════════════════════════════════════════
+let testTopic = 'all';
+let testQueue = [];
+let testIdx = 0;
+let testAnswers = [];
+
+function selectTestTopic(t, btn) {
+  testTopic = t;
+  document.querySelectorAll('.sel-btn[id^="tsel-"]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startTest() {
+  let pool = TEST_QUESTIONS;
+  if (testTopic !== 'all') {
+    const map = { prep: 'at/on/in', time: 'Uhrzeiten', vocab: 'Vokabeln' };
+    pool = pool.filter(q => q.cat === map[testTopic]);
+  }
+  testQueue = shuffle(pool).slice(0, 20);
+  testIdx = 0;
+  testAnswers = [];
+  document.getElementById('test-start').style.display = 'none';
+  document.getElementById('test-result').style.display = 'none';
+  document.getElementById('test-running').style.display = 'block';
+  showTestQuestion();
+}
+
+function showTestQuestion() {
+  const q = testQueue[testIdx];
+  const pct = (testIdx / testQueue.length * 100);
+  document.getElementById('test-pbar').style.width = pct + '%';
+  document.getElementById('test-counter').textContent = `Frage ${testIdx + 1} von ${testQueue.length}`;
+  document.getElementById('test-q').textContent = q.q;
+
+  const optsEl = document.getElementById('test-opts');
+  optsEl.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'test-opt';
+    btn.textContent = opt;
+    btn.onclick = () => selectTestAnswer(i);
+    optsEl.appendChild(btn);
+  });
+
+  document.getElementById('test-fb').className = 'test-feedback';
+  document.getElementById('test-next').style.display = 'none';
+}
+
+let selectedTestAnswer = -1;
+
+function selectTestAnswer(i) {
+  if (document.getElementById('test-next').style.display === 'block') return;
+  selectedTestAnswer = i;
+  const btns = document.querySelectorAll('.test-opt');
+  btns.forEach((b, j) => {
+    b.style.borderColor = j === i ? 'var(--accent)' : '';
+    b.style.color = j === i ? 'var(--accent)' : '';
+  });
+  // Auto-reveal after selection
+  const q = testQueue[testIdx];
+  setTimeout(() => {
+    btns.forEach(b => b.disabled = true);
+    const correct = i === q.a;
+    testAnswers.push({ q: q, chosen: i, correct });
+    btns[q.a].className = 'test-opt correct';
+    if (!correct) btns[i].className = 'test-opt wrong';
+    const fb = document.getElementById('test-fb');
+    fb.className = `test-feedback show ${correct ? 'good' : 'bad'}`;
+    fb.textContent = correct ? '✅ Correct!' : `❌ The correct answer is: "${q.opts[q.a]}"`;
+    document.getElementById('test-next').style.display = 'block';
+  }, 300);
+}
+
+function testNext() {
+  testIdx++;
+  if (testIdx >= testQueue.length) showTestResult();
+  else showTestQuestion();
+}
+
+function showTestResult() {
+  document.getElementById('test-running').style.display = 'none';
+  document.getElementById('test-result').style.display = 'block';
+
+  const correct = testAnswers.filter(a => a.correct).length;
+  const total = testAnswers.length;
+  const pct = Math.round(correct / total * 100);
+
+  document.getElementById('res-emoji').textContent = pct >= 85 ? '🏆' : pct >= 70 ? '⭐' : pct >= 50 ? '💪' : '📖';
+  document.getElementById('res-score').textContent = `${correct} / ${total} (${pct}%)`;
+
+  // Breakdown by category
+  const cats = {};
+  testAnswers.forEach(a => {
+    if (!cats[a.q.cat]) cats[a.q.cat] = { c: 0, t: 0 };
+    cats[a.q.cat].t++;
+    if (a.correct) cats[a.q.cat].c++;
+  });
+  let html = '';
+  Object.entries(cats).forEach(([cat, v]) => {
+    html += `<div class="rb-row"><span>${cat}</span><span style="color:var(--accent3)">${v.c}/${v.t}</span></div>`;
+  });
+  document.getElementById('res-breakdown').innerHTML = html;
+}
+
+// ═══════════════════════════════════════════
+// COLLAPSIBLE
+// ═══════════════════════════════════════════
+function toggleBlock(header) {
+  const body = header.nextElementSibling;
+  const isOpen = header.classList.contains('open');
+  header.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+startGaps();
+loadFlashCards();
+</script>
+</body>
+</html>
